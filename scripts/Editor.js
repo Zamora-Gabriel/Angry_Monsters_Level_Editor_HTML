@@ -53,7 +53,7 @@ export default class Editor {
     }
 
     _updateLevelList(levelList) {
-        //Do some fancy jquert to fill the level list
+        //Fill the level list
 
         const $optionList = $('#level-list');
         levelList.forEach(item => {
