@@ -21,6 +21,11 @@ class Server {
             response.send('index.html');
         });
 
+        this.api.get('/editor', (request, response) => {
+            //Get editor pàge
+            response.sendFile(Path.join(__dirname, 'editor.html'));
+        });
+
         this.api.post('/api', (request, response) => {
             let assert = true;
             let params = request.params; //Data attached in the url "/api/:name/:value"
@@ -39,6 +44,19 @@ class Server {
 
             //respond
         });
+
+
+        this.api.post('/api/get_level_list', (request, response) => {
+            let params = request.params; //Data attached in the url "/api/:name/:value"
+            let query = request.query; //Data attached as "?name=valkue&name?=val?"
+            let data = request.body; //Data attached as a Json structure
+
+            let result = {
+                error: 0,
+                payload: ["data_1"]
+            }
+            response.send(JSON.stringify(result));
+        })
 
         this.run();
     }

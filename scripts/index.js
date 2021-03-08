@@ -4,14 +4,15 @@
 'use strict';
 
 import App from './App.js';
+import Editor from './Editor.js';
 
 //main
 
 (function Main() {
 
     $(document).ready(event => {
-        const app = new App();
-        app.run();
+        const editor = new Editor();
+        Editor.run();
     })
 
 })()
