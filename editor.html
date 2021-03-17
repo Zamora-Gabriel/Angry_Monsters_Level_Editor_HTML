@@ -3,48 +3,69 @@
 
 <head>
     <title>Editor</title>
-    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/styles.css" rel="stylesheet" type="text/css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
     <header>
-        <h1>Editor Client</h1>
+        <h1>
+            <center>Editor Client</center>
+        </h1>
     </header>
     <main>
-        <section id="test-form">
+        <section class="flex-container">
 
-            <form id="fav-form" class="submission-form" accept-charset="utf-8">
+            <section id="form-field">
+                <form id="Details-form" class="submission-form" accept-charset="utf-8">
+                    Levels:
+                    <br>
+                    <select label="lev" name="Levels">
+                    <option value="Level1">Level-1</option>
+                    </select>
+                    <br>Obstacles:<br>
+                    <input type="text" label="obs" name="obstacles" value="10" />
+                    <br> Cannons:<br>
+                    <input type="text" label="can" name="cannons" value="Max-shots" />
+                    <br> Max shots:<br>
+                    <input type="text" label="maxShot" name="max-shots" value="10" />
+                    <br> Background:<br>
+                    <input type="text" label="bkg" name="background" value="my-background" />
+                    <br> One Star Score:<br>
+                    <input type="text" label="oneStar" name="score-star1" value="500" />
+                    <br> Two Star Score:<br>
+                    <input type="text" label="twoStar" name="score-star2" value="1000" />
+                    <br> Three Star Score:<br>
+                    <input type="text" label="threeStar" name="score-star3" value="2000" />
+                    <br>
+                    <button id="save-bttn">Save</button>
 
-                <input type="text" name="fav-take-out" value="" />
+                </form>
+            </section>
 
-                <input type="text" name="fav-food" value="" />
+            <section id="edit-field">
+                <div id="window-ed" class="edit-child">
+                    <!--Dynamically generated-->
 
-                <select name="fav-beverage">
-                    <option value="coke">Coca Cola</option>
-                    <option value="pepsi">Pepsi</option>
-                    <option value="coffee">Coffee</option>
-                    <option value="tea">Tea</option>
-                    <option value="water">Water</option>
-                </select>
+                </div>
+                <div id="info-window" class="edit-child"></div>
+            </section>
 
-                <input type="submit" name="action" value="submit" />
-
-            </form>
-
+            <section id="object-lib-area">
+                <ul id="object-list">
+                    <li name="obj1" value="obj1">
+                        <!--<div class="obstacle debug" draggable="true"></div>-->
+                        <div id="box-one" class="wood-box draggable" draggable="true"></div>
+                    </li>
+                </ul>
+            </section>
         </section>
-
-        <section id="output-area">
-            <div id="output-field" class="box-it-up"></div>
-            <!--Fill Dynamically-->
-        </section>
-
     </main>
 
 
     <footer>
-
+        --Copyright (C) 2021 Gabriel Zamora--
     </footer>
 
     <script type="module" src="scripts/index.js"></script>

@@ -12,7 +12,7 @@ import Editor from './Editor.js';
 
     $(document).ready(event => {
         const editor = new Editor();
-        Editor.run();
+        editor.run();
     })
 
 })()
