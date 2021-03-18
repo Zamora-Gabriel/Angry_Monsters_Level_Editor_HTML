@@ -28,9 +28,9 @@ class Server {
             response.sendFile(Path.join(__dirname, 'editor.html'));
         });
 
-        this.api.post('/api/get_level_list', (request, response) => {
+        /*this.api.post('/api/get_level_list', (request, response) => {
             // FileSystem
-        });
+        });*/
 
         this.api.post('/api/get_object_list', (request, response) => {});
 
@@ -55,7 +55,7 @@ class Server {
             }
             let fileData = FileSystem.readFile(`${folder}/${paramenters.name}.json`, `utf8`)
                 .then(fileData => {
-                    // If data is fine, add to the reply
+                    // If data is fine, add to the reply's payload
                     reply.payload = fileData;
                 })
                 .catch(err => {
@@ -75,9 +75,9 @@ class Server {
 
             //pull info from request
 
-            let food = data['fav-food'];
-            let bev = data['fav-beverage'];
-            let takeOut = data['fav-take-out']
+            let food = data['favFood'];
+            let bev = data['favBeverage'];
+            let takeOut = data['favTakeOut']
 
             //do something
 
@@ -88,8 +88,8 @@ class Server {
 
 
         this.api.post('/api/get_level_list', (request, response) => {
-            let params = request.params; //Data attached in the url "/api/:name/:value"
-            let query = request.query; //Data attached as "?name=value&name?=val?"
+            // let params = request.params; //Data attached in the url "/api/:name/:value"
+            // let query = request.query; //Data attached as "?name=value&name?=val?"
             let data = request.body; //Data attached as a Json structure
 
             let result = {

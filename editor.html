@@ -6,6 +6,8 @@
     <link href="css/styles.css" rel="stylesheet" type="text/css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!--Modal library-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -21,9 +23,11 @@
                 <form id="Details-form" class="submission-form" accept-charset="utf-8">
                     Levels:
                     <br>
-                    <select label="lev" name="Levels">
-                    <option value="Level1">Level-1</option>
+                    <select id="level-list" name="Levels">
+                        <!--Add by getting the levels from server-->
                     </select>
+                    <br>Level name:<br>
+                    <input type="text" label="lev" name="newlev" value="level-name" />
                     <br>Obstacles:<br>
                     <input type="text" label="obs" name="obstacles" value="10" />
                     <br> Cannons:<br>
@@ -47,20 +51,65 @@
             <section id="edit-field">
                 <div id="window-ed" class="edit-child">
                     <!--Dynamically generated-->
-
                 </div>
                 <div id="info-window" class="edit-child"></div>
+                <br>
             </section>
 
             <section id="object-lib-area">
                 <ul id="object-list">
                     <li name="obj1" value="obj1">
                         <!--<div class="obstacle debug" draggable="true"></div>-->
-                        <div id="box-one" class="wood-box draggable" draggable="true"></div>
+                        <div id="box-one" class="black-box draggable" draggable="true"></div>
                     </li>
                 </ul>
+                <br>
+
+                <!-- Trigger the object editor modal -->
+                <button id="create-obj-bttn">New Object</button>
+
+                <!-- Trigger the target editor modal -->
+                <button id="create-target-bttn">New Target</button>
             </section>
         </section>
+
+        <!-- Object Editor Modal -->
+        <div id="object_modal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" id="obj_win_close">&times;</span>
+                    <h2>Modal Header</h2>
+                </div>
+                <div class="modal-body">
+                    <div>Somwthing pls</div>
+                </div>
+                <div class="modal-footer">
+                    <h3>Modal Footer</h3>
+                </div>
+            </div>
+        </div>
+        <!--End of object editor Modal-->
+
+        <!-- Target Editor Modal -->
+        <div id="target_modal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" id="target_win_close">&times;</span>
+                    <h2>Modal Header</h2>
+                </div>
+                <div class="modal-body">
+                    <p>Some text in the Modal Body</p>
+                    <p>Some other text...</p>
+                </div>
+                <div class="modal-footer">
+                    <h3>Modal Footer</h3>
+                </div>
+            </div>
+        </div>
+        <!-- End of Target Editor Modal -->
+
     </main>
 
 

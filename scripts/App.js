@@ -20,19 +20,19 @@ export default class App {
         let request = $(event.target).serializeArray();
         let bodyData = {};
         request.forEach(element => {
-            bodyData["element.name"] = element.value;
+            bodyData[element.name] = element.value;
 
         });
         let requestData = JSON.stringify(bodyData);
 
         //send to server
-        //$.post("/api", requestData, this.handleServerResponse);
+        $.post("/api", requestData, this.handleServerResponse);
 
         //ok
         //$.post("/api", bodyData, this.handleServerResponse);
 
         //ok
-        $.post("/api", params, this.handleServerResponse);
+        //$.post("/api", params, this.handleServerResponse);
 
     }
 

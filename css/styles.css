@@ -36,17 +36,20 @@ header h1 {
     flex-grow: 1;
     margin: 1vh;
     text-align: center;
-    line-height: 4.5vh;
+    line-height: 3.5vh;
     font-size: 3vh;
     border: 0.3vh solid black;
 }
 
 #edit-field {
-    /*width: 125vh;*/
+    width: 1280px;
     display: flex;
     flex-direction: column;
     flex-grow: 10;
 }
+
+
+/***Editor***/
 
 .edit-child {
     overflow: hidden;
@@ -63,17 +66,28 @@ header h1 {
     border: 2px solid black;
 }
 
+
+/***Editor Window***/
+
 #window-ed {
+    height: 780px;
     flex-grow: 1;
     height: 60vh;
 }
+
+
+/***Info Window***/
 
 #info-window {
     flex-grow: 1;
     height: 10vh;
 }
 
+
+/***Object Library***/
+
 #object-lib-area {
+    overflow-y: auto;
     flex-grow: 1;
 }
 
@@ -81,4 +95,92 @@ footer {
     display: flex;
     justify-content: center;
     font-size: 2vh;
+}
+
+
+/***Modals***/
+
+
+/* The Modal (background) */
+
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    padding-top: 100px;
+    /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+}
+
+
+/* Modal Header */
+
+.visible {
+    display: block;
+}
+
+.modal-header {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+
+/* Modal Body */
+
+.modal-body {
+    padding: 2px 16px;
+}
+
+
+/* Modal Footer */
+
+.modal-footer {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+
+/* Modal Content */
+
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    color: black;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+
+/* Add Animation */
+
+@keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
 }

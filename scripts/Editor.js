@@ -27,14 +27,6 @@ export default class Editor {
             })
             .catch(error => { this._showErrorDialog(error) });
 
-        /*
-        
-                ideally 
-
-                this.gameObjectList = new GameObjectList();
-                this.gameObjectList.populate();
-
-                */
         //TODO: initialize all draggable stuff
 
         //TODO: Handle user save events
@@ -55,7 +47,7 @@ export default class Editor {
             .then(theLevelList => JSON.parse(theLevelList))
             .then(levelData => {
                 //populate the pulldown in the form
-                let tempList = [{ level_1: "stuff" }, { level_2: "stuff2" }];
+                let tempList = [{ name: "level_1" }, { name: "level_2" }];
                 this._updateLevelList(tempList);
             });
     }
@@ -65,7 +57,8 @@ export default class Editor {
 
         const $optionList = $('#level-list');
         levelList.forEach(item => {
-            let $option = $(`<option value>="${item}"> ${item}</option>`);
+            console.log(item.name);
+            let $option = $(`<option value="${item.name}"> ${item.name}</option>`);
             $optionList.append($option);
         });
     }
