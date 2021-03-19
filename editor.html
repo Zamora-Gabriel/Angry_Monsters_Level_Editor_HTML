@@ -79,13 +79,46 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <span class="close" id="obj_win_close">&times;</span>
-                    <h2>Modal Header</h2>
+                    <h2>Object Editor</h2>
                 </div>
                 <div class="modal-body">
-                    <div>Somwthing pls</div>
+                    <section id="object-form-field">
+                        <center>
+                            <form id="object-form" class="submission-form" accept-charset="utf-8">
+                                Name:
+                                <br>
+                                <input type="text" name="name" value="object-name" />
+                                <!--TODO: Load object-->
+                                <button id="load-obj-bttn">Load</button>
+                                <br>Texture:
+                                <select id="obj-texture" name="texture">
+                                <!--Hardcode: Get textures from img folder-->
+                                <option value="wood">wood</option>
+                                <option value="metal">metal</option>
+                            </select>
+                                <br>Shape:
+                                <select id="obj-shape" name="shape">
+                                <!--Hardcode: Get shapes from img folder-->
+                                <option value="round">round</option>
+                                <option value="square">square</option>
+                            </select>
+                                <button id="prev-obj-bttn">Preview</button>
+                                <div id="obj-editor">
+                                    <!--Preview of object-->
+                                    <div id="preview-obj"></div>
+                                </div>
+                                <br>Height:<br>
+                                <input type="text" name="height" value="70" />
+                                <br>Width:<br>
+                                <input type="text" name="width" value="70" />
+                                <br>Mass:<br>
+                                <input type="text" name="mass" value="1" />
+                                <input type="submit" name="action" value="Save Object" />
+                            </form>
+                        </center>
+                    </section>
                 </div>
                 <div class="modal-footer">
-                    <h3>Modal Footer</h3>
                 </div>
             </div>
         </div>
@@ -97,14 +130,48 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <span class="close" id="target_win_close">&times;</span>
-                    <h2>Modal Header</h2>
+                    <h2>Target Editor</h2>
                 </div>
                 <div class="modal-body">
-                    <p>Some text in the Modal Body</p>
-                    <p>Some other text...</p>
+                    <section id="target-form-field">
+                        <center>
+                            <form id="target-form" class="submission-form" accept-charset="utf-8">
+                                Name:
+                                <br>
+                                <input type="text" name="name" value="target-name" />
+                                <!--TODO: Load target/object-->
+                                <button id="load-tar-bttn">Load</button>
+                                <br>Texture:
+                                <select id="target-texture" name="texture">
+                                <!--Hardcode: Get textures from img folder-->
+                                <option value="brachy">brachy</option>
+                                <option value="barioth">barioth</option>
+                                <option value="dino">dino</option>
+                                <option value="ratha">ratha</option>
+                            </select>
+                                <br>Shape:
+                                <select id="target-shape" name="shape">
+                                <!--Hardcode: Get shapes from img folder-->
+                                <option value="round">round</option>
+                                <option value="square">square</option>
+                            </select>
+                                <button id="prev-tar-bttn">Preview</button>
+                                <div id="tar-editor">
+                                    <!--Preview of object-->
+                                    <div id="preview-tar"></div>
+                                </div>
+                                <br>Height:<br>
+                                <input type="text" name="height" value="70" />
+                                <br>Width:<br>
+                                <input type="text" name="width" value="70" />
+                                <br>Mass:<br>
+                                <input type="text" name="mass" value="1" />
+                                <input type="submit" name="action" value="Save Object" />
+                            </form>
+                        </center>
+                    </section>
                 </div>
                 <div class="modal-footer">
-                    <h3>Modal Footer</h3>
                 </div>
             </div>
         </div>

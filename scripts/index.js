@@ -11,6 +11,7 @@ import ObjWindow from './ObjWindow.js';
 (function Main() {
 
     $(document).ready(event => {
+        const app = new App();
         const editor = new Editor();
         const objWin = new ObjWindow();
         editor.run();
