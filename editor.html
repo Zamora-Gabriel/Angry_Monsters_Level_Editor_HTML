@@ -18,8 +18,12 @@
     </header>
     <main>
         <section class="flex-container">
-
             <section id="form-field">
+                <center>Username:
+                    <!--User id goes  inside this placeholder, pg20gabriel is a default-->
+                    <input type="text" id="id-placeholder" value="pg20gabriel" />
+                    <button id="get-all-data">Update User Info</button>
+                </center>
                 <form id="Details-form" class="submission-form" accept-charset="utf-8">
                     Levels:
                     <br>
@@ -44,7 +48,6 @@
                     <input type="text" label="threeStar" name="score-star3" value="2000" />
                     <br>
                     <button id="save-bttn">Save</button>
-
                 </form>
             </section>
 
@@ -57,9 +60,11 @@
             </section>
 
             <section id="object-lib-area">
+                <select id="object-select">
+                    <!--Add by getting the objects from server-->
+                </select>
                 <ul id="object-list">
                     <li name="obj1" value="obj1">
-                        <!--<div class="obstacle debug" draggable="true"></div>-->
                         <div id="box-one" class="black-box draggable" draggable="true"></div>
                     </li>
                 </ul>

@@ -11,6 +11,8 @@ import { fstat } from 'fs';
 
 const PORT = 3000;
 
+var userExists = false;
+
 class Server {
     constructor() {
         this.title = "Angry Pigs";
@@ -29,12 +31,78 @@ class Server {
             response.sendFile(Path.join(__dirname, 'editor.html'));
         });
 
-        /*this.api.post('/api/get_level_list', (request, response) => {
-            // FileSystem
-        });*/
+        // GET LEVEL LIST //
+        this.api.post('/api/get_level_list', (request, response) => {
+            // let params = request.params; //Data attached in the url "/api/:name/:value"
+            // let query = request.query; //Data attached as "?name=value&name?=val?"
+            let data = request.body; //Data attached as a Json structure
+            let reply = new Reply(1, "Don't use data");
+
+            // Check if the user exists
+            this.CheckUserId(data.userid);
+            if (userExists == false) {
+                reply.error(2, "User doesn't exist");
+                response.send(reply.serialize());
+                return;
+            };
+
+            let result = {
+                payload: []
+            }
+
+            // Open some file
+            let folder = "./data/Levels";
+
+            // iterator
+            let i = 0;
+
+            // Search inside the folder for the file names
+            FileSystem.readdirSync(`${folder}`).forEach(element => {
+                result.payload[i] = { name: `${element.replace(".json",'')}`, filename: `${element}` };
+                i++;
+            });
+
+            reply.payload = result.payload;
+            reply.error(0, "No Error");
+            response.send(JSON.stringify(reply))
+        });
+
 
         // GET OBJECT LIST //
-        this.api.post('/api/get_object_list', (request, response) => {});
+        this.api.post('/api/get_object_list', (request, response) => {
+            // let params = request.params; //Data attached in the url "/api/:name/:value"
+            // let query = request.query; //Data attached as "?name=value&name?=val?"
+            let data = request.body; //Data attached as a Json structure
+            let reply = new Reply(1, "Don't use data");
+
+            // Check if the user exists
+            this.CheckUserId(data.userid);
+            if (userExists == false) {
+                reply.error(2, "User doesn't exist");
+                response.send(reply.serialize());
+                return;
+            };
+
+            let result = {
+                payload: []
+            }
+
+            // Open some file
+            let folder = "./data/library";
+
+            // iterator
+            let i = 0;
+
+            // Search inside the folder for the file names
+            FileSystem.readdirSync(`${folder}`).forEach(element => {
+                result.payload[i] = { name: `${element.replace(".json",'')}`, filename: `${element}` };
+                i++;
+            });
+
+            reply.payload = result.payload;
+            reply.error(0, "No Error");
+            response.send(JSON.stringify(reply));
+        });
 
 
         // SAVE //
@@ -46,11 +114,15 @@ class Server {
 
             let isNew = true;
 
-            /*"userid": "valid vfs username", // eg pg15student
-            "name": "filename", // name of entity, no spaces, no extension
-            "type": "object" | "level", // one of these two key strings*/
-
             let reply = new Reply(1, "Don't use data");
+
+            // Check if the user exists
+            this.CheckUserId(parameters.userid);
+            if (userExists == false) {
+                reply.error(2, "User doesn't exist");
+                response.send(reply.serialize());
+                return;
+            };
 
             // Open some file
             let folder = "./data";
@@ -71,7 +143,7 @@ class Server {
             // Return error as file already exists, ask user in handler if wants to overwrite
             if (isNew == false && parameters.rewrite == "false") {
 
-                reply.error(1, "No data");
+                reply.error(3, "Overwrite error");
 
                 response.send(reply.serialize());
             } else {
@@ -100,21 +172,29 @@ class Server {
             "name": "filename", // name of entity, no spaces, no extension
             "type": "object" | "level", // one of these two key strings*/
 
+            // Check if the user exists
+            this.CheckUserId(parameters.userid);
+            if (userExists == false) {
+                reply.error(2, "User doesn't exist");
+                response.send(reply.serialize());
+                return;
+            };
+
             let reply = new Reply(1, "Don't use data");
 
             // Open some file
-            let folder = "../data";
+            let folder = "./data";
             if (parameters.type == "object") {
                 folder += "/library";
             }
-            let fileData = FileSystem.readFile(`${folder}/${paramenters.name}.json`, `utf8`)
-                .then(fileData => {
+            try {
+                let fileData = FileSystem.readFileSync(`${folder}/${parameters.name}.json`, `utf8`)
                     // If data is fine, add to the reply's payload
-                    reply.payload = fileData;
-                })
-                .catch(err => {
-                    reply.error(1, "No data");
-                })
+                reply.payload = fileData;
+            } catch {
+                reply.error(1, "No data");
+            }
+
 
             response.send(reply.ok().serialize());
 
@@ -141,19 +221,24 @@ class Server {
         });
 
 
-        this.api.post('/api/get_level_list', (request, response) => {
-            // let params = request.params; //Data attached in the url "/api/:name/:value"
-            // let query = request.query; //Data attached as "?name=value&name?=val?"
-            let data = request.body; //Data attached as a Json structure
 
-            let result = {
-                error: 0,
-                payload: ["data_1"]
-            }
-            response.send(JSON.stringify(result));
-        })
 
         this.run();
+    }
+
+    CheckUserId(userid) {
+        // Open some file
+        let folder = "./data/Users";
+
+        // Search inside the folder for the file names
+        FileSystem.readdirSync(`${folder}`).forEach(element => {
+            if (userid + ".json" == element) {
+                // User found
+                userExists = true;
+                return;
+            }
+            userExists = false;
+        });
     }
 
 

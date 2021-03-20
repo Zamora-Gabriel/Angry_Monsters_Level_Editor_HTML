@@ -32,9 +32,11 @@ export default class ObjWindow {
             bodyData[element.name] = element.value;
 
         });
-        //let requestData = JSON.stringify(bodyData);
 
         let requestData = new Request();
+        requestData.userid = $("#id-placeholder").val();
+
+        // Transform payload to JSONString
         requestData.payload = JSON.stringify(bodyData);
         requestData.type = "object";
         requestData.name = bodyData.name;
@@ -47,27 +49,29 @@ export default class ObjWindow {
 
         //send to server
         $.post("/api/save", requestData, this.handleServerResponseObj);
-
-        //ok
-        //$.post("/api", bodyData, this.handleServerResponse);
-
-        //ok
-        //$.post("/api", params, this.handleServerResponse);
-
     }
 
     handleServerResponseObj(data) {
         let assert = true;
         let dataParsed = JSON.parse(data);
-        if (dataParsed.error == 1) {
+
+        if (dataParsed.error == 3) {
+
+            // Overwriting error
             if (confirm(' A file with your suggested name was found... Do you want to overwrite the file?')) {
-                console.log("yes");
                 overwriteSave = true;
-                //send to server
+                // Submit and save to server even if overwritting an existing file
                 $("#object-form").submit();
             }
-        } else {
+        } else if (dataParsed.error == 2) {
+            // Not found user error
+            alert("User is not found in the server");
+        } else if (dataParsed.error == 0) {
+            // Saved
             alert("Successfully saved file");
+        } else {
+            // File System error
+            alert("Data couldn't be saved");
         }
     }
 
@@ -137,6 +141,7 @@ export default class ObjWindow {
         //let requestData = JSON.stringify(bodyData);
 
         let requestData = new Request();
+        requestData.userid = $("#id-placeholder").val();
         requestData.payload = JSON.stringify(bodyData);
         requestData.type = "object";
         requestData.name = bodyData.name;
@@ -154,15 +159,23 @@ export default class ObjWindow {
 
     handleServerResponseTarget(data) {
         let dataParsed = JSON.parse(data);
-        if (dataParsed.error == 1) {
+        if (dataParsed.error == 3) {
+
+            // Overwriting error
             if (confirm(' A file with your suggested name was found... Do you want to overwrite the file?')) {
-                console.log("yes");
                 overwriteSave = true;
-                //send to server
+                // Submit and save to server even if overwritting an existing file
                 $("#target-form").submit();
             }
-        } else {
+        } else if (dataParsed.error == 2) {
+            // Not found user error
+            alert("User is not found in the server");
+        } else if (dataParsed.error == 0) {
+            // Saved
             alert("Successfully saved file");
+        } else {
+            // File System error
+            alert("Target couldn't be saved");
         }
     }
 

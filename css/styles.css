@@ -249,3 +249,10 @@ footer {
     background-image: url("../images/ratha.png");
     background-size: 100%;
 }
+
+
+/***user id hidden***/
+
+#id-placeholder {
+    display: flex;
+}
