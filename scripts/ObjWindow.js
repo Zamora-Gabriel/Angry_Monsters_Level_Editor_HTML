@@ -32,7 +32,7 @@ export default class ObjWindow {
             bodyData[element.name] = element.value;
 
         });
-
+        bodyData["type"] = "Collidable";
         let requestData = new Request();
         requestData.userid = $("#id-placeholder").val();
 
@@ -138,12 +138,13 @@ export default class ObjWindow {
             bodyData[element.name] = element.value;
 
         });
-        //let requestData = JSON.stringify(bodyData);
+
+        bodyData["type"] = "Target";
 
         let requestData = new Request();
         requestData.userid = $("#id-placeholder").val();
         requestData.payload = JSON.stringify(bodyData);
-        requestData.type = "object";
+        requestData.type = "target";
         requestData.name = bodyData.name;
 
         // Check overwrite flag

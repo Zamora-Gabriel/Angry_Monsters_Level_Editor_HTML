@@ -3,6 +3,13 @@
 
 //import { resolve } from "path";
 import Request from './Request.js';
+import LevelPackager from './LevelPackager.js';
+
+// Check if object is inside the list to rise the flag (For draggables)
+var cloneflag = 0;
+
+// Overwrite flag
+var overwriteSave = false;
 
 export default class Editor {
 
@@ -11,7 +18,7 @@ export default class Editor {
         //set up fields to hold data
         //TODO: the level itself is in the DOM
         this.gameObjectList = [];
-
+        this.$dragTarget;
         this.offset = {
             x: 0,
             y: 0
@@ -23,52 +30,64 @@ export default class Editor {
             // Level List update
             this._populateLevelList()
                 .then(gameLevels => {
-
+                    if (gameLevels.error != 0) {
+                        this._showErrorDialog(gameLevels.error);
+                        return;
+                    }
                     // Shove all level names to Select level field
-                    this._updateLevelList(gameLevels.__private__.payload);
+                    this._updateLevelList(gameLevels.payload);
                 })
                 .catch(error => { this._showErrorDialog(error) });
             // Object List update
             this._populateGameObjectList()
                 .then(gameObjects => {
-
+                    if (gameObjects.error != 0) {
+                        this._showErrorDialog(gameObjects.error);
+                        return;
+                    }
                     //Build Sidebar with gameObjects
-                    this._updateObjectList(gameObjects.__private__.payload);
+                    this._updateObjectList(gameObjects.payload);
 
                 })
                 .catch(error => { this._showErrorDialog(error) });
         });
 
-        //TODO: initialize all draggable stuff
-
-        //TODO: Handle user save level event
     }
 
 
     run() {
         this._handleDraggables();
+        //Handle user save level event
+        // Get submit button click from the object editor
+        $("#Details-form").on("submit", event => this._handleSaveLevel(event));
     }
 
-    _showErrorDialog() {
-        //TODO: build a dialog system for showing error messages
+    _showErrorDialog(error) {
+        // Not found user error
+        if (error == 2) { alert("User is not found in the server"); }
+
+        // Load error
+        alert("Data couldn't be loaded");
     }
 
     // RESET THE LEVEL'S AND OBJECT'S LISTS AS UPDATED//
     _resetSelectors() {
         const $levelSelect = $('#level-list');
-        const $objectSelect = $('#object-select');
+        const $objectList = $('#object-list');
 
         $levelSelect.empty();
-        $objectSelect.empty();
+        $objectList.empty();
     }
 
     /*** LEVELS ***/
 
     _populateLevelList() {
-        return new Promise((resolve, reject) => { //parameters are functions too
-            //do some work
+        return new Promise((resolve, reject) => {
 
+            // Build request
             let requestData = new Request();
+
+            // Get user id
             requestData.userid = $("#id-placeholder").val();
 
             $.post('/api/get_level_list', requestData)
@@ -89,7 +108,8 @@ export default class Editor {
 
         const $optionList = $('#level-list');
         levelList.forEach(item => {
-            console.log(item.name);
+            // Debug names
+            // console.log(item.name);
             let $option = $(`<option value="${item.name}"> ${item.name}</option>`);
             $optionList.append($option);
         });
@@ -100,12 +120,10 @@ export default class Editor {
     _updateObjectList(objectList) {
         //Fill the object select
 
-        const $optionList = $('#object-select');
         objectList.forEach(item => {
-            console.log(item.name);
-            let $option = $(`<option value="${item.name}"> ${item.name}</option>`);
-            $optionList.append($option);
-            this._loadObjectsInSideBar(item.name)
+            // Debug names
+            // console.log(item.name);
+            this._loadObjectsInSideBar(item)
                 .then(gameObjects => {
 
                     //Build Sidebar with gameObjects
@@ -136,17 +154,17 @@ export default class Editor {
         })
     }
 
-    _loadObjectsInSideBar(filename) {
+    _loadObjectsInSideBar(gameObj) {
         return new Promise((resolve, reject) => { //parameters are functions too
             // Build request
 
-
+            let filename = gameObj.name;
             // Build request
 
             let requestData = new Request();
             requestData.userid = $("#id-placeholder").val();
             requestData.name = filename;
-            requestData.type = "object";
+            requestData.type = gameObj.type;
 
             $.post('/api/load', requestData)
                 .then(theObjectList => JSON.parse(theObjectList))
@@ -165,28 +183,35 @@ export default class Editor {
         let dataParsed = JSON.parse(data);
 
         const $objectList = $('#object-list');
-        console.log(dataParsed.name);
+
         // Unpack the payload and assign values
         let shape = dataParsed.shape;
         let texture = dataParsed.texture;
         let height = dataParsed.height;
         let width = dataParsed.width;
+        let type = "target";
         //<div id="box-one" class="black-box draggable" draggable="true"></div>
-        let $option = $(`<li name="${dataParsed.name}"><div class="${shape} ${texture}" style="height: ${height}, width: ${width}" draggable="true"></li>`);
+        if (dataParsed.type == "Collidable") {
+            type = "object";
+        }
+        let $option = $(`<li id="${dataParsed.name}"><div data-value="${dataParsed.name}" class="${shape} ${texture} ${type} draggable" 
+        style="height: ${height}px; width: ${width}px;" draggable="true"></li>`);
         $objectList.append($option);
     }
-
-
 
 
     // END OF OBJECTS METHODS //
 
     _handleDraggables() {
-        $(`#box-one`)
-            .on('mouseover', event => {
+        let left = 0;
+        let top = 0;
+
+        $(document)
+            // Delegate for dynamic objects
+            .on('mouseover', ".draggable", event => {
                 // Change cursor
             })
-            .on('dragstart', event => {
+            .on('dragstart', '.draggable', event => {
                 // get data to transfer
                 let transferData = {
                     targetId: event.target.id,
@@ -199,6 +224,13 @@ export default class Editor {
 
                 // Grab the offset
                 this.$dragTarget = $(event.target);
+                let parentId = this.$dragTarget.parent().attr("id");
+                if (this.$dragTarget.attr('data-value') == parentId) {
+                    cloneflag = 1;
+                } else {
+                    cloneflag = 0;
+                }
+
                 //let offset = {};
                 this.offset.x = event.clientX - Math.floor(event.target.offsetLeft);
                 this.offset.y = event.clientY - Math.floor(event.target.offsetTop);
@@ -207,42 +239,40 @@ export default class Editor {
                 // let z = event.target.style.zIndex;
 
             })
-            .on('mouseout', event => {
+            .on('mouseout', '.dragabble', event => {
                 // TODO: Change cursor back
             });
 
-        $('#window-ed')
-            .on('dragover', event => {
-                event.preventDefault();
+        $('#window-ed').on('dragover', (event) => {
+            event.preventDefault();
+            // set the cursor different, allow the drop to occur.
+            left = `${event.clientX-this.offset.x}px`;
+            top = `${event.clientY-this.offset.y}px`;
+            //this.$dragTarget.css(this.__csFrom(left, top));
+        });
 
-                console.log("hi2");
-                //Update css for the dragTarget
-                this.$dragTarget.css({
-                    position: "absolute",
-                    margin: "0px",
-                    left: `${event.clientX - this.offset.x}px`,
-                    top: `${event.clientY - this.offset.y}px`
-                });
-            })
-            .on('drop', event => {
-                event.preventDefault();
 
-                //get embedded transferData
-                let rawData = event.originalEvent.dataTransfer.getData("text");
-                let transferData = JSON.parse(rawData);
+        $('#window-ed').on('drop', (event) => {
+            event.preventDefault();
 
-                //Attach transferData.gameParams to something
+            // Get item 
+            let $el = $(this.$dragTarget);
 
-                // Create a new element in right location
+            let value = this.$dragTarget.attr('data-value');
 
-                let $el = $(`<div id="box-${id}" class="wood-box draggable" draggable="true"></div>`)
-                $('#window-ed').addChild($el);
+            if (cloneflag != 0) {
+                this.$dragTarget.clone().appendTo(`#${value}`);
+            }
 
-                $el.css(this.__csFrom(this.$dragTarget.css('left'), this.$dragTarget.css('top')));
-            });
+            // Drop item
+            $('#window-ed').append($el);
+            $el.css(this.__csFrom(left, top));
+        });
+
     }
 
     __csFrom(leftParam, topParam) {
+        // Style for the draggable in editor window
         return {
             position: "absolute",
             margin: "0px",
@@ -265,15 +295,17 @@ export default class Editor {
         let bodyData = {};
         request.forEach(element => {
             bodyData[element.name] = element.value;
-
         });
+
+        let Level = new LevelPackager();
+        Level.buildLevel(bodyData);
 
         let requestData = new Request();
         requestData.userid = $("#id-placeholder").val();
 
         // Transform payload to JSONString
-        requestData.payload = JSON.stringify(bodyData);
-        requestData.type = "object";
+        requestData.payload = Level.serialize();
+        requestData.type = "level";
         requestData.name = bodyData.name;
 
         // Check overwrite flag

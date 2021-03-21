@@ -31,42 +31,39 @@
                         <!--Add by getting the levels from server-->
                     </select>
                     <br>Level name:<br>
-                    <input type="text" label="lev" name="newlev" value="level-name" />
+                    <input type="text" label="lev" name="name" value="level-name" />
                     <br>Obstacles:<br>
                     <input type="text" label="obs" name="obstacles" value="10" />
-                    <br> Cannons:<br>
-                    <input type="text" label="can" name="cannons" value="Max-shots" />
                     <br> Max shots:<br>
-                    <input type="text" label="maxShot" name="max-shots" value="10" />
+                    <input type="text" label="maxShot" name="ammo" value="10" />
                     <br> Background:<br>
-                    <input type="text" label="bkg" name="background" value="my-background" />
+                    <select id="background-list" name="background">
+                        <option value="Grass">Grassland</option>
+                        <option value="Sea">Sea</option>
+                    </select>
                     <br> One Star Score:<br>
-                    <input type="text" label="oneStar" name="score-star1" value="500" />
+                    <input type="text" label="oneStar" name="scoreStar1" value="500" />
                     <br> Two Star Score:<br>
-                    <input type="text" label="twoStar" name="score-star2" value="1000" />
+                    <input type="text" label="twoStar" name="scoreStar2" value="1000" />
                     <br> Three Star Score:<br>
-                    <input type="text" label="threeStar" name="score-star3" value="2000" />
+                    <input type="text" label="threeStar" name="scoreStar3" value="2000" />
                     <br>
-                    <button id="save-bttn">Save</button>
+                    <button id="save-bttn">Save Level</button>
                 </form>
             </section>
 
             <section id="edit-field">
-                <div id="window-ed" class="edit-child">
+                <div id="window-ed" class="edit-child grass">
                     <!--Dynamically generated-->
+                    <div data-value="Cannon" class="rectangle cannon catapult draggable" style="height: 200px; width: 200px; position: absolute; margin: 0px; left: 325px; top: 597px;" draggable="true"></div>
                 </div>
                 <div id="info-window" class="edit-child"></div>
                 <br>
             </section>
 
             <section id="object-lib-area">
-                <select id="object-select">
-                    <!--Add by getting the objects from server-->
-                </select>
                 <ul id="object-list">
-                    <li name="obj1" value="obj1">
-                        <div id="box-one" class="black-box draggable" draggable="true"></div>
-                    </li>
+                    <!--Add by getting the objects from server-->
                 </ul>
                 <br>
 

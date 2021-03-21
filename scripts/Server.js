@@ -64,7 +64,7 @@ class Server {
 
             reply.payload = result.payload;
             reply.error(0, "No Error");
-            response.send(JSON.stringify(reply))
+            response.send(reply.ok().serialize())
         });
 
 
@@ -95,13 +95,24 @@ class Server {
 
             // Search inside the folder for the file names
             FileSystem.readdirSync(`${folder}`).forEach(element => {
-                result.payload[i] = { name: `${element.replace(".json",'')}`, filename: `${element}` };
+                if (element != "target") {
+                    result.payload[i] = { name: `${element.replace(".json",'')}`, filename: `${element}`, type: "object" };
+                    i++;
+                }
+            });
+
+            // Search for targets
+            folder += "/target";
+
+            // Search inside the folder for the file names
+            FileSystem.readdirSync(`${folder}`).forEach(element => {
+                result.payload[i] = { name: `${element.replace(".json",'')}`, filename: `${element}`, type: "target" };
                 i++;
             });
 
             reply.payload = result.payload;
             reply.error(0, "No Error");
-            response.send(JSON.stringify(reply));
+            response.send(reply.ok().serialize());
         });
 
 
@@ -126,8 +137,13 @@ class Server {
 
             // Open some file
             let folder = "./data";
-            if (parameters.type == "object") {
+            if (parameters.type == "object" || parameters.type == "target") {
                 folder += "/library";
+                if (parameters.type == "target") {
+                    folder += "/target";
+                }
+            } else {
+                folder += "/Levels";
             }
 
 
@@ -147,15 +163,7 @@ class Server {
 
                 response.send(reply.serialize());
             } else {
-                let fileData = FileSystem.writeFile(`${folder}/${parameters.name}.json`, parameters.payload)
-                    .then(fileData => {
-                        // If data is fine, error to 0
-                        reply.error(0, "No Error");
-                    })
-                    .catch(err => {
-                        reply.error(1, "No data");
-                    })
-
+                FileSystem.writeFile(`${folder}/${parameters.name}.json`, parameters.payload);
                 response.send(reply.ok().serialize());
             }
         });
@@ -184,13 +192,20 @@ class Server {
 
             // Open some file
             let folder = "./data";
-            if (parameters.type == "object") {
+            if (parameters.type == "object" || parameters.type == "target") {
                 folder += "/library";
+                if (parameters.type == "target") {
+                    folder += "/target";
+                }
+            } else {
+                folder += "/Levels";
             }
+
             try {
                 let fileData = FileSystem.readFileSync(`${folder}/${parameters.name}.json`, `utf8`)
                     // If data is fine, add to the reply's payload
                 reply.payload = fileData;
+                reply.payload["type"] = parameters.type;
             } catch {
                 reply.error(1, "No data");
             }

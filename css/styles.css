@@ -73,6 +73,15 @@ header h1 {
     height: 780px;
     flex-grow: 1;
     height: 60vh;
+}
+
+.sea {
+    background-image: url("../images/editorback.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+.grass {
     background-image: url("../images/editorback.png");
     background-repeat: no-repeat;
     background-size: 100%;
@@ -225,6 +234,13 @@ footer {
 .wood {
     background-image: url("../images/wood.jpg");
     background-size: 100%;
+}
+
+.cannon {
+    background-image: url("../images/cannon.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    filter: brightness(30%);
 }
 
 
