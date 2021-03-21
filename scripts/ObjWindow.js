@@ -15,6 +15,12 @@ export default class ObjWindow {
 
         // Get submit button click from the target editor
         $("#target-form").on("submit", event => this.handleSubmitFormTarget(event));
+
+        // Get load button click from the object editor
+        $("#load-obj-bttn").on("click", event => this._LoadObject(event));
+
+        // Get load button click from the target editor
+        $("#load-tar-bttn").on("click", event => this._LoadTarget(event));
     }
 
 
@@ -122,6 +128,43 @@ export default class ObjWindow {
         });
     }
 
+    // LOAD OBJECT METHODS //
+    _LoadObject(event) {
+        event.preventDefault();
+
+        // get filename
+        let filename = $("#objName").val();
+
+        // Build request data
+        let requestData = new Request();
+        requestData.userid = $("#id-placeholder").val();
+        requestData.name = filename;
+        requestData.type = "object";
+
+        //send to server
+        $.post("/api/load", requestData, this._HandleLoadObject);
+
+    }
+
+    _HandleLoadObject(data) {
+        let dataParsed = JSON.parse(data);
+
+        if (dataParsed.error < 1) {
+            //No error
+            let payload = JSON.parse(dataParsed.payload);
+            $("#objName").val(payload.name);
+            $("#obj-shape").val(`${payload.shape}`).change();
+            $("#obj-texture").val(`${payload.texture}`).change();
+            $("#objHeight").val(payload.height);
+            $("#objWidth").val(payload.width);
+            $("#objMass").val(payload.mass);
+
+            return;
+        }
+        // Error
+        alert("Object couldn't be found on server");
+    }
+
 
     /***TARGET EDITOR FUNCTIONS***/
 
@@ -223,5 +266,42 @@ export default class ObjWindow {
             editor.addClass(`${texture}`);
             editor.addClass(`${shape}`);
         });
+    }
+
+    // LOAD TARGET METHODS //
+    _LoadTarget(event) {
+        event.preventDefault();
+
+        // get filename
+        let filename = $("#tarName").val();
+
+        // Build request data
+        let requestData = new Request();
+        requestData.userid = $("#id-placeholder").val();
+        requestData.name = filename;
+        requestData.type = "target";
+
+        //send to server
+        $.post("/api/load", requestData, this._HandleLoadObject);
+
+    }
+
+    _HandleLoadObject(data) {
+        let dataParsed = JSON.parse(data);
+
+        if (dataParsed.error < 1) {
+            //No error
+            let payload = JSON.parse(dataParsed.payload);
+            $("#tarName").val(payload.name);
+            $("#target-shape").val(`${payload.shape}`).change();
+            $("#target-texture").val(`${payload.texture}`).change();
+            $("#tarHeight").val(payload.height);
+            $("#tarWidth").val(payload.width);
+            $("#tarMass").val(payload.mass);
+
+            return;
+        }
+        // Error
+        alert("Object couldn't be found on server");
     }
 }

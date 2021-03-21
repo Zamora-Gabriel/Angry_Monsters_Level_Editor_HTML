@@ -4,6 +4,7 @@
 //import { resolve } from "path";
 import Request from './Request.js';
 import LevelPackager from './LevelPackager.js';
+import LevelLoader from './LevelLoader.js';
 
 // Check if object is inside the list to rise the flag (For draggables)
 var cloneflag = 0;
@@ -60,6 +61,8 @@ export default class Editor {
         //Handle user save level event
         // Get submit button click from the object editor
         $("#Details-form").on("submit", event => this._handleSaveLevel(event));
+        $("#level-loader").on("click", event => this._loadLevel(event));
+        $("#change-bkg").on("click", event => this.__ChangeBackButton(event));
     }
 
     _showErrorDialog(error) {
@@ -207,6 +210,21 @@ export default class Editor {
         let top = 0;
 
         $(document)
+            .on("mousedown", ".draggable", event => {
+                // Remove object in edit area if middle mouse button is clicked
+                if (event.which == 2) {
+                    // Check for the middle mouse click
+                    event.preventDefault();
+                    console.log("pressed");
+                    this.$deleteTarget = $(event.target);
+                    if (this.__checkParent(this.$deleteTarget) != true) {
+                        // Don't delete if it is a cannon
+                        if (this.$deleteTarget.attr("data-value") != "Cannon") {
+                            this.$deleteTarget.remove();
+                        }
+                    }
+                }
+            })
             // Delegate for dynamic objects
             .on('mouseover', ".draggable", event => {
                 // Change cursor
@@ -224,8 +242,8 @@ export default class Editor {
 
                 // Grab the offset
                 this.$dragTarget = $(event.target);
-                let parentId = this.$dragTarget.parent().attr("id");
-                if (this.$dragTarget.attr('data-value') == parentId) {
+                // Check the parent, if it is the object library, rise cloneflag
+                if (this.__checkParent(this.$dragTarget) == true) {
                     cloneflag = 1;
                 } else {
                     cloneflag = 0;
@@ -269,6 +287,14 @@ export default class Editor {
             $el.css(this.__csFrom(left, top));
         });
 
+    }
+
+    __checkParent($target) {
+        let parentId = $target.parent().attr("id");
+        if ($target.attr('data-value') == parentId) {
+            return true;
+        }
+        return false;
     }
 
     __csFrom(leftParam, topParam) {
@@ -325,10 +351,10 @@ export default class Editor {
         if (dataParsed.error == 3) {
 
             // Overwriting error
-            if (confirm(' A file with your suggested name was found... Do you want to overwrite the file?')) {
+            if (confirm('A file with your suggested name was found... Do you want to overwrite the file?')) {
                 overwriteSave = true;
                 // Submit and save to server even if overwritting an existing file
-                $("#object-form").submit();
+                $("#Details-form").submit();
             }
         } else if (dataParsed.error == 2) {
             // Not found user error
@@ -341,5 +367,67 @@ export default class Editor {
             alert("Data couldn't be saved");
         }
     }
+
+    /*** END OF SAVE LEVEL FUNCTIONS ***/
+
+    /*** LOAD LEVEL FUNCTIONS ***/
+
+    _loadLevel(event) {
+        event.preventDefault();
+
+        // get filename
+        let filename = $("#level-list :selected").val();
+
+        // Build request data
+        let requestData = new Request();
+        requestData.userid = $("#id-placeholder").val();
+        requestData.name = filename;
+        requestData.type = "level";
+
+        //send to server
+        $.post("/api/load", requestData, this._handleLoadLevel);
+
+    }
+
+    _handleLoadLevel(data) {
+        let dataParsed = JSON.parse(data);
+
+        if (dataParsed.error < 1) {
+            //No error
+            let levelLoad = new LevelLoader();
+
+            levelLoad.loadLevel(dataParsed.payload);
+
+            // change background after level is loaded
+            $("#change-bkg").click();
+
+            return;
+        }
+        // Error
+        alert("Level couldn't be found on server");
+    }
+
+    __ChangeBackButton(event) {
+        event.preventDefault();
+
+        this.__ChangeBackground();
+    }
+
+    __ChangeBackground() {
+        // Get new background
+        let $selectedBck = $("#background-list :selected").val();
+
+        // Get edit-window's classes
+        let $editWin = $("#window-ed");
+        let classList = $editWin.attr("class");
+        let classArr = classList.split(/\s+/);
+
+        // Change background
+        $editWin.removeClass(classArr[1]);
+        $editWin.addClass($selectedBck);
+    }
+
+    /*** END OF LOAD LEVELS ***/
+
 
 }

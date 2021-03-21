@@ -20,7 +20,7 @@
         <section class="flex-container">
             <section id="form-field">
                 <center>Username:
-                    <!--User id goes  inside this placeholder, pg20gabriel is a default-->
+                    <!--User id goes inside this placeholder, pg20gabriel is a default, and currently the only user accepted-->
                     <input type="text" id="id-placeholder" value="pg20gabriel" />
                     <button id="get-all-data">Update User Info</button>
                 </center>
@@ -30,32 +30,32 @@
                     <select id="level-list" name="Levels">
                         <!--Add by getting the levels from server-->
                     </select>
+                    <button id="level-loader">Load-Level</button>
                     <br>Level name:<br>
-                    <input type="text" label="lev" name="name" value="level-name" />
-                    <br>Obstacles:<br>
-                    <input type="text" label="obs" name="obstacles" value="10" />
+                    <input type="text" id="levName" name="name" value="level-name" />
                     <br> Max shots:<br>
-                    <input type="text" label="maxShot" name="ammo" value="10" />
+                    <input type="text" id="maxShot" name="ammo" value="10" />
                     <br> Background:<br>
                     <select id="background-list" name="background">
                         <option value="Grass">Grassland</option>
                         <option value="Sea">Sea</option>
-                    </select>
+                    </select><br>
+                    <button id="change-bkg">Change Background</button>
                     <br> One Star Score:<br>
-                    <input type="text" label="oneStar" name="scoreStar1" value="500" />
+                    <input type="text" id="oneStar" name="scoreStar1" value="500" />
                     <br> Two Star Score:<br>
-                    <input type="text" label="twoStar" name="scoreStar2" value="1000" />
+                    <input type="text" id="twoStar" name="scoreStar2" value="1000" />
                     <br> Three Star Score:<br>
-                    <input type="text" label="threeStar" name="scoreStar3" value="2000" />
+                    <input type="text" id="threeStar" name="scoreStar3" value="2000" />
                     <br>
                     <button id="save-bttn">Save Level</button>
                 </form>
             </section>
 
             <section id="edit-field">
-                <div id="window-ed" class="edit-child grass">
-                    <!--Dynamically generated-->
-                    <div data-value="Cannon" class="rectangle cannon catapult draggable" style="height: 200px; width: 200px; position: absolute; margin: 0px; left: 325px; top: 597px;" draggable="true"></div>
+                <div id="window-ed" class="edit-child Grass">
+                    <!--Dynamically generated for objects, cannon is a default-->
+                    <div data-value="Cannon" class="rectangle cannon catapult draggable" style="height: 300px; width: 300px; position: absolute; margin: 0px; left: 325px; top: 500px;" draggable="true"></div>
                 </div>
                 <div id="info-window" class="edit-child"></div>
                 <br>
@@ -89,7 +89,7 @@
                             <form id="object-form" class="submission-form" accept-charset="utf-8">
                                 Name:
                                 <br>
-                                <input type="text" name="name" value="object-name" />
+                                <input type="text" id="objName" name="name" value="object-name" />
                                 <!--TODO: Load object-->
                                 <button id="load-obj-bttn">Load</button>
                                 <br>Texture:
@@ -110,11 +110,11 @@
                                     <div id="preview-obj"></div>
                                 </div>
                                 <br>Height:<br>
-                                <input type="text" name="height" value="70" />
+                                <input type="text" id="objHeight" name="height" value="70" />
                                 <br>Width:<br>
-                                <input type="text" name="width" value="70" />
+                                <input type="text" id="objWidth" name="width" value="70" />
                                 <br>Mass:<br>
-                                <input type="text" name="mass" value="1" />
+                                <input type="text" id="objMass" name="mass" value="1" />
                                 <input type="submit" name="action" value="Save Object" />
                             </form>
                         </center>
@@ -140,7 +140,7 @@
                             <form id="target-form" class="submission-form" accept-charset="utf-8">
                                 Name:
                                 <br>
-                                <input type="text" name="name" value="target-name" />
+                                <input type="text" id="tarName" name="name" value="target-name" />
                                 <!--TODO: Load target/object-->
                                 <button id="load-tar-bttn">Load</button>
                                 <br>Texture:
@@ -163,11 +163,11 @@
                                     <div id="preview-tar"></div>
                                 </div>
                                 <br>Height:<br>
-                                <input type="text" name="height" value="70" />
+                                <input type="text" id="tarHeight" name="height" value="70" />
                                 <br>Width:<br>
-                                <input type="text" name="width" value="70" />
+                                <input type="text" id="tarWidth" name="width" value="70" />
                                 <br>Mass:<br>
-                                <input type="text" name="mass" value="1" />
+                                <input type="text" id="tarMass" name="mass" value="1" />
                                 <input type="submit" name="action" value="Save Object" />
                             </form>
                         </center>

@@ -205,14 +205,12 @@ class Server {
                 let fileData = FileSystem.readFileSync(`${folder}/${parameters.name}.json`, `utf8`)
                     // If data is fine, add to the reply's payload
                 reply.payload = fileData;
-                reply.payload["type"] = parameters.type;
+
+                response.send(reply.ok().serialize());
             } catch {
                 reply.error(1, "No data");
+                response.send(reply.serialize());
             }
-
-
-            response.send(reply.ok().serialize());
-
         });
 
         this.api.post('/api', (request, response) => {

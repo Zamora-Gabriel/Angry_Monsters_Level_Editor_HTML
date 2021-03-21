@@ -2,7 +2,7 @@
 'use strict';
 
 export default class LevelPackager {
-    constructor(error = 0, errorMsg = "No Error") {
+    constructor() {
         // level wrapper
         this.level = {
             id: "",
@@ -22,8 +22,6 @@ export default class LevelPackager {
 
     buildLevel(submittedInfo) {
 
-        let $editZone = $("#window-ed");
-
         // Fill from submitted information
         this.__FillSubmitted(submittedInfo);
 
@@ -40,8 +38,6 @@ export default class LevelPackager {
         this.level.star1 = submittedInfo.scoreStar1;
         this.level.star2 = submittedInfo.scoreStar2;
         this.level.star3 = submittedInfo.scoreStar3;
-
-
     }
 
     __FillEntity() {
@@ -100,10 +96,6 @@ export default class LevelPackager {
         position["x"] = `${x}`;
         position["y"] = `${y}`;
         return position;
-    }
-
-    readLevel(payload) {
-
     }
 
     serialize() {

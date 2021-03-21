@@ -75,13 +75,13 @@ header h1 {
     height: 60vh;
 }
 
-.sea {
-    background-image: url("../images/editorback.png");
+.Sea {
+    background-image: url("../images/Sea.jpg");
     background-repeat: no-repeat;
     background-size: 100%;
 }
 
-.grass {
+.Grass {
     background-image: url("../images/editorback.png");
     background-repeat: no-repeat;
     background-size: 100%;

@@ -1,1 +1,9 @@
-{ "name": "Metalbox", "texture": "metal", "shape": "square", "height": "70", "width": "70", "mass": "1", "type": "Collidable" }
+{
+    "name": "Metalbox",
+    "texture": "metal",
+    "shape": "square",
+    "height": "70",
+    "width": "70",
+    "mass": "1",
+    "type": "Collidable"
+}
