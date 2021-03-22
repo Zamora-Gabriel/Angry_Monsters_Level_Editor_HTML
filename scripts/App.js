@@ -1,6 +1,8 @@
 // Copyright (C) 2021 Gabriel Zamora
 'use strict';
 
+// FOR FUTURE IMPLEMENTATION, DEMO FROM CLASS //
+
 export default class App {
 
     constructor() {

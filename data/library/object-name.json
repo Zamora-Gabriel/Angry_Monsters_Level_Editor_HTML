@@ -1,1 +1,1 @@
-{"name":"object-name","texture":"wood","shape":"round","height":"70","width":"70","mass":"1","type":"Collidable"}
+{ "name": "object-name", "texture": "wood", "shape": "round", "height": "70", "width": "70", "mass": "1", "type": "Collidable" }

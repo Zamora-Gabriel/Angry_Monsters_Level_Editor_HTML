@@ -213,26 +213,6 @@ class Server {
             }
         });
 
-        this.api.post('/api', (request, response) => {
-
-            let assert = true;
-            let params = request.params; //Data attached in the url "/api/:name/:value"
-            let query = request.query; //Data attached as "?name=value&name?=val?"
-            let data = request.body; //Data attached as a Json structure
-
-            //pull info from request
-
-            let food = data['favFood'];
-            let bev = data['favBeverage'];
-            let takeOut = data['favTakeOut']
-
-            //do something
-
-
-
-            //respond
-        });
-
 
 
 
