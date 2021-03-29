@@ -23,7 +23,7 @@ class Server {
 
         //Get home page
         this.api.get('/', (request, response) => {
-            response.send('index.html');
+            response.send('index.html', { title: "Angry Pigs" });
         });
 
         this.api.get('/editor', (request, response) => {
