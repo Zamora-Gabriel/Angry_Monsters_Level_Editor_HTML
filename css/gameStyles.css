@@ -1,0 +1,123 @@
+body {
+    background-color: midnightblue;
+    color: white;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+}
+
+.flex-container section {
+    background-color: gainsboro;
+    overflow: hidden;
+    /* flex-grow: 1; */
+    margin: 1vh;
+    text-align: center;
+    line-height: 3.5vh;
+    font-size: 3vh;
+    border: 0.3vh solid black;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: teal;
+    border: 0.5vh solid black;
+    color: black;
+    align-items: center;
+    justify-content: center;
+}
+
+#game-field {
+    display: flex;
+}
+
+
+/***Game Screen***/
+
+#window-ed {
+    height: 600px;
+    width: 1280px;
+    border: 0.5vh solid black;
+}
+
+
+/***Backgrounds***/
+
+.Sea {
+    background-image: url("../images/Sea.jpg");
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+.Grass {
+    background-image: url("../images/editorback.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+
+/***Objects***/
+
+
+/*Round shape*/
+
+.round {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.square {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    overflow: hidden;
+}
+
+
+/***textures***/
+
+.metal {
+    background-image: url("../images/metalCenter.png");
+    background-size: 100%;
+}
+
+.wood {
+    background-image: url("../images/wood.jpg");
+    background-size: 100%;
+}
+
+.cannon {
+    background-image: url("../images/cannon.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    filter: brightness(30%);
+}
+
+
+/***targets***/
+
+.brachy {
+    background-image: url("../images/brachy.png");
+    background-size: 100%;
+}
+
+.barioth {
+    background-image: url("../images/barioth.png");
+    background-size: 100%;
+}
+
+.dino {
+    background-image: url("../images/dino.png");
+    background-size: 100%;
+}
+
+.ratha {
+    background-image: url("../images/ratha.png");
+    background-size: 100%;
+}
