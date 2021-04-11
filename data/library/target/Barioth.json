@@ -1,1 +1,1 @@
-{"name":"Barioth","texture":"barioth","shape":"round","height":"70","width":"70","mass":"1","type":"Target"}
+{"name":"Barioth","texture":"barioth","shape":"round","height":"100","width":"100","valueTarget":"100","mass":"1","type":"Target"}

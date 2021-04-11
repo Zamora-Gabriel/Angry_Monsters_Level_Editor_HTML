@@ -17,7 +17,7 @@ export default class Game {
         // Build a world model
         // set up event handlers for user
 
-        // aim cannon
+        // aim cannon 
         // Fire cannon
         // Win/lose
 

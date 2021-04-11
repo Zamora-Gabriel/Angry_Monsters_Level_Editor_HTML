@@ -196,9 +196,15 @@ export default class Editor {
         //<div id="box-one" class="black-box draggable" draggable="true"></div>
         if (dataParsed.type == "Collidable") {
             type = "object";
+            let $option = $(`<li id="${dataParsed.name}"><div data-value="${dataParsed.name}" class="${shape} ${texture} ${type} draggable" 
+            style="height: ${height}px; width: ${width}px;" draggable="true"></li>`);
+            $objectList.append($option);
+            return
         }
+
+        // if it is still a target build target object
         let $option = $(`<li id="${dataParsed.name}"><div data-value="${dataParsed.name}" class="${shape} ${texture} ${type} draggable" 
-        style="height: ${height}px; width: ${width}px;" draggable="true"></li>`);
+        style="height: ${height}px; width: ${width}px;" data-score="${dataParsed.valueTarget}" draggable="true"></li>`);
         $objectList.append($option);
     }
 

@@ -76,6 +76,10 @@ export default class LevelPackager {
         entity["shape"] = classArr[0];
         entity["texture"] = classArr[1];
 
+        if (classArr[2] == "target") {
+            entity["valueTarget"] = $item.attr("data-score");
+        }
+
         // Get css properties
         entity["height"] = $item.css("height");
         entity["width"] = $item.css("width");

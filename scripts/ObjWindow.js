@@ -297,6 +297,7 @@ export default class ObjWindow {
             $("#target-texture").val(`${payload.texture}`).change();
             $("#tarHeight").val(payload.height);
             $("#tarWidth").val(payload.width);
+            $("#tarVal").val(payload.valueTarget);
             $("#tarMass").val(payload.mass);
 
             return;

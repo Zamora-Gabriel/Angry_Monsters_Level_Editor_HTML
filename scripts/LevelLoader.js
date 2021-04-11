@@ -64,7 +64,7 @@ export default class LevelLoader {
             // Build the div target
             let $option = $(`<div data-value="${item.name}" class="${item.shape} ${item.texture} target draggable" 
             style="height: ${item.height}; width: ${item.width}; top: ${item.pos.y}; 
-            left: ${item.pos.x}; position: absolute; margin: 0px;" draggable="true">`);
+            left: ${item.pos.x}; position: absolute; margin: 0px;" data-score="${item.valueTarget}" draggable="true">`);
 
             // Add it to the edit window
             $editArea.append($option);

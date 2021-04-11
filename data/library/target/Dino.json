@@ -1,1 +1,1 @@
-{"name":"Dino","texture":"dino","shape":"round","height":"100","width":"100","mass":"1","type":"Target"}
+{ "name": "Dino", "texture": "dino", "shape": "round", "height": "100", "width": "100", "valueTarget": 300, "mass": "1", "type": "Target" }
