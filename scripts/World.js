@@ -2,6 +2,7 @@
 'use strict';
 
 import Physics from './libs/Physics.js';
+import EntityController from './EntityController.js';
 
 const TIMESTEP = 1 / 60;
 
@@ -28,7 +29,7 @@ export default class World {
         this.model = new Physics.World(gravity);
 
         this._createGround(w, h);
-        this.addListener()
+        //this.addListener()
     }
 
     addListener() {
@@ -73,6 +74,7 @@ export default class World {
 
     update() {
         this.model.Step(TIMESTEP, VELOCITY, POSITION);
+        //this.model.DrawDebugData();
         this.model.ClearForces();
         // Delete entities
 
@@ -93,12 +95,21 @@ export default class World {
         let bodyDef = new Physics.BodyDef();
         // Set type as static as ground doesn't move
         bodyDef.type = Physics.Body.b2_staticBody;
-        bodyDef.position.x = width / SCALE;
-        bodyDef.position.y = height / SCALE;
+        bodyDef.position.x = 8;
+        bodyDef.position.y = 10;
 
         // Fixture definition
         let fixDef = new Physics.FixtureDef;
+        fixDef.density = 1.0;
+        fixDef.friction = 0.5;
+        fixDef.restitution = 0.2;
         fixDef.shape = new Physics.PolygonShape;
+        fixDef.shape.SetAsBox(10, 0.5);
+        this.model.CreateBody(bodyDef).CreateFixture(fixDef);
+
+        //create some objects (DEBUG Purposes)
+        let thisItem = new EntityController(this.model, $("#CannonX"), false);
+        this.entityList[0] = thisItem;
 
     }
 }

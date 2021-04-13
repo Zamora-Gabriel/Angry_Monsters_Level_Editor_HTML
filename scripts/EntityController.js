@@ -18,24 +18,31 @@ const SCALE = 100; // 100px = 1 meter
 export default class EntityController {
     constructor(world, $el, isStatic) {
 
-        let x = y = width = height = 0;
+        let x = 325;
+        let y = 500;
+        let width = 300;
+        let height = 300;
 
         this.controller = world;
 
         this.$view = $el;
         this.model = this._createModel(x, y, width, height, isStatic);
         this.userData = { domObj: $el, width: width, height: height };
+        this.model.m_userData = this.userData;
 
         // Reset DOM object position for use with CSS3 positioning
         this.$view.css({ 'left': '0px', 'top': '0px' });
     }
 
-    _createModel(x, y, width, height) {
+    _createModel(x, y, width, height, isStatic) {
 
         // Body definition
         let bodyDef = new Physics.BodyDef();
         // Set type
         bodyDef.type = Physics.Body.b2_dynamicBody;
+        if (isStatic) {
+            bodyDef.type = Physics.Body.b2_staticBody;
+        }
         bodyDef.position.x = x / SCALE;
         bodyDef.position.y = y / SCALE;
 
@@ -48,8 +55,8 @@ export default class EntityController {
         fixDef.friction = 0.7; // 1 = sticky, 0 = slippery
         fixDef.restitution = 0.2; // 1 = very bouncy, 0 = no bounce
 
-        let world = this.controller.getModel();
-        let body = this.world._createBody(bodyDef);
+        //let world = this.controller.getModel();
+        let body = this.controller.CreateBody(bodyDef);
 
         body.CreateFixture(fixDef);
 
@@ -58,14 +65,14 @@ export default class EntityController {
 
     render() {
         let mdl = this.model;
-        let screenX = mdl.xf.position.x * SCALE;
-        let screen = mdl.xf.position.y * SCALE;
+        let screenX = mdl.m_xf.position.x * SCALE;
+        let screen = mdl.m_xf.position.y * SCALE;
 
         // Calculate translation and rotation
-        let x = Math.floor(screenX - mdl.userData.width);
-        let y = Math.floor(screen - mdl.userData.height);
+        let x = Math.floor(screenX - mdl.m_userData.width);
+        let y = Math.floor(screen - mdl.m_userData.height);
 
-        let sweepN2Pi = this.model.sweep.a + TWO_PI;
+        let sweepN2Pi = this.model.m_sweep.a + TWO_PI;
 
         let sweepN2PIRadians = (sweepN2Pi % TWO_PI) * RAD_2_DEG;
         let rotDeg = Math.round(sweepN2PIRadians * 100) / 100;
