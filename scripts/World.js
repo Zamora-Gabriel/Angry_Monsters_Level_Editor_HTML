@@ -1,4 +1,4 @@
-// Copyright (C) 2021 Gabriel Zamora
+// Copyright (C) 2021 Haojun Liu, Daiyong Kim, Gabriel Zamora
 'use strict';
 
 import Physics from './libs/Physics.js';
@@ -27,6 +27,7 @@ export default class World {
 
         this.model = new Physics.World(gravity);
 
+        this._createGround(w, h);
         this.addListener()
     }
 
@@ -70,10 +71,6 @@ export default class World {
         this.model.SetContactListener(listener);
     }
 
-    initialize() {
-        this._createGround();
-    }
-
     update() {
         this.model.Step(TIMESTEP, VELOCITY, POSITION);
         this.model.ClearForces();
@@ -92,14 +89,16 @@ export default class World {
 
 
     _createGround(width, height) {
-        let ground = new Physics.FixtureDef();
-
-
-        ground.shape = new Physics.PolygonShape();
-
-        ground.shape.SetAsBox(10, 1);
-
+        // Body definition
         let bodyDef = new Physics.BodyDef();
+        // Set type as static as ground doesn't move
         bodyDef.type = Physics.Body.b2_staticBody;
+        bodyDef.position.x = width / SCALE;
+        bodyDef.position.y = height / SCALE;
+
+        // Fixture definition
+        let fixDef = new Physics.FixtureDef;
+        fixDef.shape = new Physics.PolygonShape;
+
     }
 }

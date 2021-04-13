@@ -1,4 +1,4 @@
-// Copyright (C) 2021 Gabriel Zamora
+// Copyright (C) 2021 Haojun Liu, Daiyong Kim, Gabriel Zamora
 'use strict';
 
 import Express from 'express'
