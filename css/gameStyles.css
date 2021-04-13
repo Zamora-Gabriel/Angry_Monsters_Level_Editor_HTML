@@ -38,9 +38,10 @@ header {
 /***Game Screen***/
 
 #window-ed {
-    height: 600px;
-    width: 1280px;
+    height: 620px;
+    width: 1390px;
     border: 0.5vh solid black;
+    position: relative;
 }
 
 

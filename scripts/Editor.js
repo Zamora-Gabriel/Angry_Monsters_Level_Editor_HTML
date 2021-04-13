@@ -253,6 +253,8 @@ export default class Editor {
                     cloneflag = 1;
                 } else {
                     cloneflag = 0;
+                    var position = this.$dragTarget.position();
+                    console.log(`Print my position bro: ${position.left}, ${position.top}}`)
                 }
 
                 //let offset = {};
@@ -272,6 +274,7 @@ export default class Editor {
             // set the cursor different, allow the drop to occur.
             left = `${event.clientX-this.offset.x}px`;
             top = `${event.clientY-this.offset.y}px`;
+            //console.log(`this happens: new left: ${left} new top:${top}`);
             //this.$dragTarget.css(this.__csFrom(left, top));
         });
 
