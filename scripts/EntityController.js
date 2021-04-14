@@ -13,15 +13,15 @@ const TWO_PI = 2 * Math.PI;
 
 const RAD_2_DEG = 180 / Math.PI;
 
-const SCALE = 20; // 20px = 1 meter
+const SCALE = 100; // 100px = 1 meter
 
 export default class EntityController {
     constructor(world, $el, isStatic) {
 
-        let x = $el.position().left;
-        let y = $el.position().top;
-        let width = $el.width();
-        let height = $el.height();
+        let x = 325;
+        let y = 500;
+        let width = 300;
+        let height = 300;
 
         this.controller = world;
 
@@ -32,8 +32,6 @@ export default class EntityController {
 
         // Reset DOM object position for use with CSS3 positioning
         this.$view.css({ 'left': '0px', 'top': '0px' });
-
-        this.render();
     }
 
     _createModel(x, y, width, height, isStatic) {
@@ -45,8 +43,8 @@ export default class EntityController {
         if (isStatic) {
             bodyDef.type = Physics.Body.b2_staticBody;
         }
-        bodyDef.position.x = 252 / SCALE;
-        bodyDef.position.y = 200 / SCALE;
+        bodyDef.position.x = x / SCALE;
+        bodyDef.position.y = y / SCALE;
 
         // Fixture definition
         let fixDef = new Physics.FixtureDef;

@@ -10,7 +10,7 @@ const VELOCITY = 10;
 
 const POSITION = 10;
 
-const SCALE = 20; // 20px = 1 meter
+const SCALE = 100; // 100px = 1 meter
 
 export default class World {
     constructor($el) {
@@ -26,7 +26,7 @@ export default class World {
 
         console.log(`width is: ${w}, height is: ${h}`); // Debug get height and width
 
-        this.model = new Physics.World(gravity, true);
+        this.model = new Physics.World(gravity);
 
         this._createGround(w, h);
         //this.addListener()
@@ -38,7 +38,7 @@ export default class World {
         // Functions box2d calls
         listener.BeginContact = contact => {
             // OnCollide equivalent
-            /* Example of JSON object for setting the user data
+            /* Example of JSON object for settingthe user data
             // On level object taking level object and build it on load
             userData = {
                 isBird: false,
@@ -95,8 +95,8 @@ export default class World {
         let bodyDef = new Physics.BodyDef();
         // Set type as static as ground doesn't move
         bodyDef.type = Physics.Body.b2_staticBody;
-        bodyDef.position.x = 12;
-        bodyDef.position.y = 55;
+        bodyDef.position.x = 8;
+        bodyDef.position.y = 10;
 
         // Fixture definition
         let fixDef = new Physics.FixtureDef;
@@ -104,7 +104,7 @@ export default class World {
         fixDef.friction = 0.5;
         fixDef.restitution = 0.2;
         fixDef.shape = new Physics.PolygonShape;
-        fixDef.shape.SetAsBox(1, 0.5);
+        fixDef.shape.SetAsBox(10, 0.5);
         this.model.CreateBody(bodyDef).CreateFixture(fixDef);
 
         //create some objects (DEBUG Purposes)
@@ -112,5 +112,4 @@ export default class World {
         this.entityList[0] = thisItem;
 
     }
-
 }
