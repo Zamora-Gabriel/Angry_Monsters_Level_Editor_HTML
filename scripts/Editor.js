@@ -254,27 +254,26 @@ export default class Editor {
                 } else {
                     cloneflag = 0;
                     var position = this.$dragTarget.position();
-                    console.log(`Print my position bro: ${position.left}, ${position.top}}`)
                 }
 
                 //let offset = {};
                 this.offset.x = event.clientX - Math.floor(event.target.offsetLeft);
                 this.offset.y = event.clientY - Math.floor(event.target.offsetTop);
+
                 // Old z-index
                 this.z = this.$dragTarget.css("zIndex");
                 // let z = event.target.style.zIndex;
 
             })
-            .on('mouseout', '.dragabble', event => {
+            /*.on('mouseout', '.dragabble', event => {
                 // TODO: Change cursor back
-            });
+            });*/
 
         $('#window-ed').on('dragover', (event) => {
             event.preventDefault();
             // set the cursor different, allow the drop to occur.
             left = `${event.clientX-this.offset.x}px`;
             top = `${event.clientY-this.offset.y}px`;
-            //console.log(`this happens: new left: ${left} new top:${top}`);
             //this.$dragTarget.css(this.__csFrom(left, top));
         });
 
