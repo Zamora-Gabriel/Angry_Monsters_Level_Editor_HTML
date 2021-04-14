@@ -10,7 +10,7 @@ const VELOCITY = 10;
 
 const POSITION = 10;
 
-const SCALE = 100; // 100px = 1 meter
+const SCALE = 20; // 20px = 1 meter
 
 export default class World {
     constructor($el) {
@@ -95,8 +95,8 @@ export default class World {
         let bodyDef = new Physics.BodyDef();
         // Set type as static as ground doesn't move
         bodyDef.type = Physics.Body.b2_staticBody;
-        bodyDef.position.x = 8;
-        bodyDef.position.y = 10;
+        bodyDef.position.x = 35;
+        bodyDef.position.y = 30;
 
         // Fixture definition
         let fixDef = new Physics.FixtureDef;

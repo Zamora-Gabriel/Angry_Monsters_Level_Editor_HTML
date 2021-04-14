@@ -13,19 +13,19 @@ const TWO_PI = 2 * Math.PI;
 
 const RAD_2_DEG = 180 / Math.PI;
 
-const SCALE = 100; // 100px = 1 meter
+const SCALE = 20; // 20px = 1 meter
 
 export default class EntityController {
     constructor(world, $el, isStatic) {
 
-        let x = 325;
+        let x = 325; // Hardcoded data, TODO: Check elements parameters
         let y = 500;
         let width = 300;
         let height = 300;
 
         this.controller = world;
 
-        this.$view = $el;
+        this.$view = $el // = $("#id-of-object")
         this.model = this._createModel(x, y, width, height, isStatic);
         this.userData = { domObj: $el, width: width, height: height };
         this.model.m_userData = this.userData;
@@ -72,6 +72,7 @@ export default class EntityController {
         let x = Math.floor(screenX - mdl.m_userData.width);
         let y = Math.floor(screen - mdl.m_userData.height);
 
+        // Rotation
         let sweepN2Pi = this.model.m_sweep.a + TWO_PI;
 
         let sweepN2PIRadians = (sweepN2Pi % TWO_PI) * RAD_2_DEG;
