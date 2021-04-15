@@ -16,7 +16,7 @@ const RAD_2_DEG = 180 / Math.PI;
 const SCALE = 20;
 
 export default class EntityController {
-    constructor(world, $el, isStatic) {
+    constructor(world, $el, isStatic, options) {
 
         let x = $el.position().left; // Hardcoded data, TODO: Check elements parameters
         let y = $el.position().top;
@@ -26,7 +26,7 @@ export default class EntityController {
         this.controller = world;
 
         this.$view = $el // = $("#id-of-object")
-        this.model = this._createModel(x, y, width, height, isStatic);
+        this.model = this._createModel(x, y, width, height, isStatic, options);
         this.userData = { domObj: $el, width: width, height: height };
         this.model.m_userData = this.userData;
 

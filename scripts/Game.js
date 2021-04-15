@@ -12,7 +12,7 @@ export default class Game {
         this.lastUpdate = 0;
         this.entityList = [];
         this.world = new World();
-        this.currentLevel = new Level('FirstLevel', 'pg20gabriel');
+        this.currentLevel = new Level(this.world.GetWorld(), 'FirstLevel', 'pg20gabriel');
         this.currentLevel.load()
             .then(levelData => {
 
@@ -30,7 +30,7 @@ export default class Game {
 
     render(deltaTime) {
 
-        this.world.render(deltaTime);
+        //this.world.render(deltaTime);
         this.entityList.forEach(entity => {
             entity.render(deltaTime);
         });
