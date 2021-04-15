@@ -8,14 +8,19 @@ import Editor from './Editor.js';
 import Game from './Game.js';
 import ObjWindow from './ObjWindow.js';
 
+import World from './World.js';
+
 //main
 (function Main() {
 
     $(document).ready(event => {
-        const app = new App();
+        /*const app = new App();
         const game = new Game();
 
-        game.run();
+        game.run();*/
+
+        const world = new World();
+
     })
 
 })()
