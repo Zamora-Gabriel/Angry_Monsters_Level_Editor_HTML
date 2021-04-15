@@ -51,7 +51,7 @@ header {
 
 #canvas {
     z-index: 0;
-    display: none;
+    /*display: none;*/
     position: relative;
 }
 
