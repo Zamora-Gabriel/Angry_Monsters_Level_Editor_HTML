@@ -14,12 +14,12 @@ import World from './World.js';
 (function Main() {
 
     $(document).ready(event => {
-        /*const app = new App();
+        /*const app = new App();*/
         const game = new Game();
 
-        game.run();*/
+        game.run();
 
-        const world = new World();
+        //const world = new World();
 
     })
 

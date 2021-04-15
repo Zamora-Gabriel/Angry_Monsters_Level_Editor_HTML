@@ -70,7 +70,7 @@ export default class EntityController {
         body_def.userData = options.user_data;
 
         var body = this.controller.CreateBody(body_def);
-        var fixture = body.CreateFixture(fix_def);
+        body.CreateFixture(fix_def);
 
         return body;
     }

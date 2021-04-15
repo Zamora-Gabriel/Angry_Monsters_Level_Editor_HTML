@@ -180,6 +180,9 @@ class Server {
             "name": "filename", // name of entity, no spaces, no extension
             "type": "object" | "level", // one of these two key strings*/
 
+
+            let reply = new Reply(1, "Don't use data");
+
             // Check if the user exists
             this.CheckUserId(parameters.userid);
             if (userExists == false) {
@@ -187,8 +190,6 @@ class Server {
                 response.send(reply.serialize());
                 return;
             };
-
-            let reply = new Reply(1, "Don't use data");
 
             // Open some file
             let folder = "./data";

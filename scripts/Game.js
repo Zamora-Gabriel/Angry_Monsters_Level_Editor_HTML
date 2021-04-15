@@ -1,65 +1,48 @@
-// Copyright (C) 2021 Gabriel Zamora
+// Copyright (C) 2019 Scott Henshaw
 'use strict';
 
-import World from './World.js'
-import Physics from './libs/Physics.js';
+import Level from "./Level.js";
+
+import World from "./World.js";
 
 export default class Game {
+
     constructor() {
-        // load level
-        // Build a world model
-        this.world = new World($("#window-ed"));
+        // put all the UI and setup here
+        this.lastUpdate = 0;
+        this.entityList = [];
+        this.world = new World();
+        this.currentLevel = new Level('FirstLevel', 'pg20gabriel');
+        this.currentLevel.load()
+            .then(levelData => {
 
-        this.entityList = []; // List of game objects
-        // set up event handlers for user
-        /* aim cannon 
-        // Fire cannon
-        // Win/lose*/
+                this.entityList = this.currentLevel.handleLoadLevel(levelData);
+                this.run();
+            });
 
-        // Start listening
+        // add all UI handlers here
     }
 
-    static get STATE() {
-        // Game state
-        return {
-            SPLASH: 0,
-            LOADING: 1,
-            GAME: 2,
-            RESULTS: 3
-        }
-        // use check (Game.STATE.LOADING)
+    update(deltaTime) {
+
+        this.world.update(deltaTime);
     }
 
-    update(dt) {
-        // if game over or not started get out
-        if (this.gameState != Game.STATE.GAME) {
-            return;
-        }
+    render(deltaTime) {
 
-        // Update special things (pig cannon balls, birds, etc.)
-
-        // Update the world
-        this.world.update();
+        this.world.render(deltaTime);
+        this.entityList.forEach(entity => {
+            entity.render(deltaTime);
+        });
     }
 
-    render(dt) {
-        // draw the DOM objects
+    run(timestep = 0) {
 
-        this.entityList.forEach(entity =>
-            entity.render()
-        );
+        let deltaTime = timestep - this.lastUpdate;
 
-        // Draw world
-        this.world.render();
-    }
+        this.update(deltaTime);
+        this.render(deltaTime);
 
-    run(dt) {
-        //run our main game Loop
-        this.gameState = 2;
-        this.update();
-        this.render();
-
-
-        window.requestAnimationFrame(dt => { this.run(dt) })
+        window.requestAnimationFrame(timestep => this.run(timestep / 100));
     }
 }

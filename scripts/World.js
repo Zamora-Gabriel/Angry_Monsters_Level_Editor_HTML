@@ -134,17 +134,20 @@ function update() {
     var fps = 60;
     var timeStep = 1.0 / (fps * 0.8);
 
-    //move the box2d world ahead
-    world.Step(timeStep, 8, 3);
-    world.ClearForces();
+        //redraw the world
+        //convert the canvas coordinate directions to cartesian coordinate direction by translating and scaling
+        ctx.save();
+        ctx.translate(0, canvas_height);
+        ctx.scale(1, -1);
+        world.DrawDebugData();
+        ctx.restore();
 
-    //redraw the world
-    //convert the canvas coordinate directions to cartesian coordinate direction by translating and scaling
-    ctx.save();
-    ctx.translate(0, canvas_height);
-    ctx.scale(1, -1);
-    world.DrawDebugData();
-    ctx.restore();
+        ctx.font = 'bold 18px arial';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#fff';
+        ctx.fillText('Box2d MouseJoint example in Javascript', canvas_width / 2, 20);
+        ctx.font = 'bold 14px arial';
+        ctx.fillText('Click on any object and drag it', canvas_width / 2, 40);
 
     entityList[0].render();
     //call this function again after 1/60 seconds or 16.7ms
