@@ -1,3 +1,5 @@
+// Copyright (C) 2021 Haojun Liu, Daiyong Kim, Gabriel Zamora
+
 'use strict';
 
 import Physics from './libs/Physics.js';
@@ -116,10 +118,10 @@ function createWorld() {
 
     //create some objects
     ground = createBox(world, 34.75, 1, 69.5, 1, { type: Physics.Body.b2_staticBody, 'user_data': { 'fill_color': 'rgba(204,237,165,1)', 'border_color': '#7FE57F' } });
-    createBox(world, 36.50, 3.80, 1, 1, { 'user_data': { 'border_color': '#555' } });
-    createBox(world, 38.50, 3.80, 1, 1, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
-    createBall(world, 38.50, 3.80, 1, { 'user_data': { 'fill_color': 'rgba(204,100,0,0.3)', 'border_color': '#555' } });
-    createBall(world, 1, 3.80, 1, { 'user_data': { 'fill_color': 'rgba(204,100,0,0.3)', 'border_color': '#555' } });
+    // createBox(world, 36.50, 3.80, 1, 1, { 'user_data': { 'border_color': '#555' } });
+    // createBox(world, 38.50, 3.80, 1, 1, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
+    //createBall(world, 38.50, 3.80, 1, { 'user_data': { 'fill_color': 'rgba(204,100,0,0.3)', 'border_color': '#555' } });
+    //createBall(world, 1, 3.80, 1, { 'user_data': { 'fill_color': 'rgba(204,100,0,0.3)', 'border_color': '#555' } });
     draw_object();
 
     return world;
