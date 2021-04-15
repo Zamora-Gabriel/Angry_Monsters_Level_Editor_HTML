@@ -15,9 +15,6 @@ var ground;
 var canvas_width;
 var canvas_height;
 var canvas_height_m;
-var mouse_pressed = false;
-var mouse_joint = false;
-var mouse_x, mouse_y;
 
 //box2d to canvas scale , therefor 1 metre of box2d = 30px of canvas :)
 var scale = 20;
@@ -30,7 +27,6 @@ export default class World {
 
         world = createWorld();
 
-
         var canvas = $('#canvas');
         ctx = canvas.get(0).getContext('2d');
 
@@ -39,63 +35,8 @@ export default class World {
         canvas_height = parseInt(canvas.attr('height'));
         canvas_height_m = canvas_height / scale;
 
-        //If mouse is moving over the thing
-        $(canvas).mousemove(function(e) {
-            var p = get_real(new Physics.Vec2(e.pageX / scale, e.pageY / scale))
-
-            // var p = new Physics.Vec2(Physics.Vec2(e.pageX/scale, e.pageY/scale) + 0, 
-            // canvas_height_m - Physics.Vec2(e.pageX/scale, e.pageY/scale));
-
-            mouse_x = p.x;
-            mouse_y = p.y;
-
-            if (mouse_pressed && !mouse_joint) {
-                var body = GetBodyAtMouse();
-
-                if (body) {
-                    //if joint exists then create
-                    var def = new Physics.MouseJointDef();
-
-                    def.bodyA = ground;
-                    def.bodyB = body;
-                    def.target = p;
-
-                    def.collideConnected = true;
-                    def.maxForce = 1000 * body.GetMass();
-                    def.dampingRatio = 0;
-
-                    mouse_joint = world.CreateJoint(def);
-
-                    body.SetAwake(true);
-                }
-            } else {
-                //nothing
-            }
-
-            if (mouse_joint) {
-                mouse_joint.SetTarget(p);
-            }
-        });
-
-        $(canvas).mousedown(function() {
-            //flag to indicate if mouse is pressed or not
-            mouse_pressed = true;
-        });
-
-        /*
-        When mouse button is release, mark pressed as false and delete the mouse joint if it exists
-        */
-        $(canvas).mouseup(function() {
-            mouse_pressed = false;
-
-            if (mouse_joint) {
-                world.DestroyJoint(mouse_joint);
-                mouse_joint = false;
-            }
-        });
-
-        //start stepping
-        step();
+        //start update
+        update();
     }
 }
 
@@ -126,6 +67,35 @@ function createWorld() {
 
     return world;
 }
+
+
+function draw_object() {
+    //create some objects (DEBUG Purposes)
+    let thisItem = new EntityController(world, $("#CannonX"), false, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
+    entityList[0] = thisItem;
+}
+
+function update() {
+    var fps = 60;
+    var timeStep = 1.0 / (fps * 0.8);
+
+    //move the box2d world ahead
+    world.Step(timeStep, 8, 3);
+    world.ClearForces();
+
+    //redraw the world
+    //convert the canvas coordinate directions to cartesian coordinate direction by translating and scaling
+    ctx.save();
+    ctx.translate(0, canvas_height);
+    ctx.scale(1, -1);
+    world.DrawDebugData();
+    ctx.restore();
+
+    entityList[0].render();
+    //call this function again after 1/60 seconds or 16.7ms
+    setTimeout(update, 1000 / fps);
+}
+
 //Function to create a round ball, sphere like object
 function createBall(world, x, y, radius, options) {
     var body_def = new Physics.BodyDef();
@@ -183,91 +153,4 @@ function createBox(world, x, y, width, height, options) {
     var f = b.CreateFixture(fix_def);
 
     return b;
-}
-
-function draw_object() {
-    //create some objects (DEBUG Purposes)
-    let thisItem = new EntityController(world, $("#CannonX"), false, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
-    entityList[0] = thisItem;
-}
-
-/*
-Draw a world
-this method is called in a loop to redraw the world
-*/
-function draw_world(world, context) {
-    //convert the canvas coordinate directions to cartesian coordinate direction by translating and scaling
-    ctx.save();
-    ctx.translate(0, canvas_height);
-    ctx.scale(1, -1);
-    world.DrawDebugData();
-    ctx.restore();
-
-    ctx.font = 'bold 18px arial';
-    ctx.textAlign = 'center';
-    ctx.fillStyle = '#fff';
-    ctx.fillText('Box2d MouseJoint example in Javascript', canvas_width / 2, 20);
-    ctx.font = 'bold 14px arial';
-    ctx.fillText('Click on any object and drag it', canvas_width / 2, 40);
-}
-
-function GetBodyAtMouse(includeStatic) {
-    var mouse_p = new Physics.Vec2(mouse_x, mouse_y);
-
-    var aabb = new Physics.AABB();
-    aabb.lowerBound.Set(mouse_x - 0.001, mouse_y - 0.001);
-    aabb.upperBound.Set(mouse_x + 0.001, mouse_y + 0.001);
-
-    var body = null;
-
-    // Query the world for overlapping shapes.
-    function GetBodyCallback(fixture) {
-        var shape = fixture.GetShape();
-
-        if (fixture.GetBody().GetType() != Physics.Body.b2_staticBody || includeStatic) {
-            var inside = shape.TestPoint(fixture.GetBody().GetTransform(), mouse_p);
-
-            if (inside) {
-                body = fixture.GetBody();
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    world.QueryAABB(GetBodyCallback, aabb);
-    return body;
-}
-
-function get_real(p) {
-    return new Physics.Vec2(p.x + 0, canvas_height_m - p.y);
-}
-
-function step() {
-    var fps = 60;
-    var timeStep = 1.0 / (fps * 0.8);
-
-    //move the box2d world ahead
-    world.Step(timeStep, 8, 3);
-    world.ClearForces();
-
-    //redraw the world
-    //convert the canvas coordinate directions to cartesian coordinate direction by translating and scaling
-    ctx.save();
-    ctx.translate(0, canvas_height);
-    ctx.scale(1, -1);
-    world.DrawDebugData();
-    ctx.restore();
-
-    ctx.font = 'bold 18px arial';
-    ctx.textAlign = 'center';
-    ctx.fillStyle = '#fff';
-    ctx.fillText('Box2d MouseJoint example in Javascript', canvas_width / 2, 20);
-    ctx.font = 'bold 14px arial';
-    ctx.fillText('Click on any object and drag it', canvas_width / 2, 40);
-
-    entityList[0].render();
-    //call this function again after 1/60 seconds or 16.7ms
-    setTimeout(step, 1000 / fps);
 }
