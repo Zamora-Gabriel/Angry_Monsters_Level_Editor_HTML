@@ -13,15 +13,15 @@ const TWO_PI = 2 * Math.PI;
 
 const RAD_2_DEG = 180 / Math.PI;
 
-const SCALE = 20; // 20px = 1 meter
+const SCALE = 20;
 
 export default class EntityController {
     constructor(world, $el, isStatic) {
 
-        let x = 325; // Hardcoded data, TODO: Check elements parameters
-        let y = 500;
-        let width = 300;
-        let height = 300;
+        let x = $el.position().left; // Hardcoded data, TODO: Check elements parameters
+        let y = $el.position().top;
+        let width = $el.width();
+        let height = $el.height();
 
         this.controller = world;
 
@@ -34,31 +34,43 @@ export default class EntityController {
         this.$view.css({ 'left': '0px', 'top': '0px' });
     }
 
-    _createModel(x, y, width, height, isStatic) {
 
-        // Body definition
-        let bodyDef = new Physics.BodyDef();
+
+    _createModel(x, y, width, height, isStatic, options) {
+
+        //default setting
+        options = $.extend(true, {
+            'density': 1.0,
+            'friction': 1.0,
+            'restitution': 0.5
+        }, options);
+
+        var body_def = new Physics.BodyDef();
+
         // Set type
-        bodyDef.type = Physics.Body.b2_dynamicBody;
+        body_def.type = Physics.Body.b2_dynamicBody;
         if (isStatic) {
-            bodyDef.type = Physics.Body.b2_staticBody;
+            body_def.type = Physics.Body.b2_staticBody;
         }
-        bodyDef.position.x = x / SCALE;
-        bodyDef.position.y = y / SCALE;
 
-        // Fixture definition
-        let fixDef = new Physics.FixtureDef;
-        fixDef.shape = new Physics.PolygonShape;
+        var fix_def = new Physics.FixtureDef();
 
-        fixDef.shape.SetAsBox(width / SCALE, height / SCALE);
-        fixDef.density = 4.0; // density * area = mass
-        fixDef.friction = 0.7; // 1 = sticky, 0 = slippery
-        fixDef.restitution = 0.2; // 1 = very bouncy, 0 = no bounce
+        fix_def.density = options.density;
+        fix_def.friction = options.friction;
+        fix_def.restitution = options.restitution;
 
-        //let world = this.controller.getModel();
-        let body = this.controller.CreateBody(bodyDef);
+        fix_def.shape = new Physics.PolygonShape();
 
-        body.CreateFixture(fixDef);
+        fix_def.shape.SetAsBox(width / (2 * SCALE), height / (2 * SCALE));
+
+        /*ERROR: Position setting*/
+        body_def.position.Set(x / SCALE, y / SCALE);
+
+        //body_def.type = options.type;
+        body_def.userData = options.user_data;
+
+        var body = this.controller.CreateBody(body_def);
+        var fixture = body.CreateFixture(fix_def);
 
         return body;
     }
@@ -66,11 +78,11 @@ export default class EntityController {
     render() {
         let mdl = this.model;
         let screenX = mdl.m_xf.position.x * SCALE;
-        let screen = mdl.m_xf.position.y * SCALE;
+        let screenY = mdl.m_xf.position.y * SCALE;
 
         // Calculate translation and rotation
         let x = Math.floor(screenX - mdl.m_userData.width);
-        let y = Math.floor(screen - mdl.m_userData.height);
+        let y = Math.floor(screenY - mdl.m_userData.height);
 
         // Rotation
         let sweepN2Pi = this.model.m_sweep.a + TWO_PI;
