@@ -12,7 +12,12 @@ export default class Game {
         this.lastUpdate = 0;
         this.entityList = [];
         this.world = new World();
-        this.currentLevel = new Level(this.world.GetWorld(), 'FirstLevel', 'pg20gabriel');
+
+        // TODO: Find a way for user to change level or user id
+        this.userID = 'pg20gabriel';
+        this.levelName = 'TestLevel';
+
+        this.currentLevel = new Level(this.world.GetWorld(), 'TestLevel', 'pg20gabriel');
         this.currentLevel.load()
             .then(levelData => {
 
