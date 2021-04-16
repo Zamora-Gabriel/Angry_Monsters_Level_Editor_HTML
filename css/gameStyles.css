@@ -116,6 +116,12 @@ header {
     filter: brightness(30%);
 }
 
+.ball {
+    background-image: url("../images/ball.png");
+    background-size: 100%;
+    filter: brightness(30%);
+}
+
 
 /***targets***/
 
