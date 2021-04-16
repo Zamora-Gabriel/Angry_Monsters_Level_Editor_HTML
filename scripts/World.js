@@ -9,6 +9,8 @@ import EntityController from './EntityController.js';
 const TIMESTEP = 1 / 60;
 const VELOCITY = 10;
 const POSITION = 10;
+
+// TODO: change this variables, maybe place them on the constructor?
 var world;
 var ctx;
 var ground;
@@ -16,7 +18,7 @@ var canvas_width;
 var canvas_height;
 var canvas_height_m;
 
-//box2d to canvas scale , therefor 1 metre of box2d = 30px of canvas :)
+//box2d to canvas scale , therefor 1 metre of box2d = 20px of canvas :)
 var scale = 20;
 
 var entityList = []; // List of game objects
@@ -60,7 +62,7 @@ export default class World {
         world.SetDebugDraw(debugDraw);
 
         //create some objects
-        ground = this._createBox(world, 34.75, 1, 69.5, 1, { type: Physics.Body.b2_staticBody, 'user_data': { 'fill_color': 'rgba(204,237,165,1)', 'border_color': '#7FE57F' } });
+        ground = this._createBox(world, 34.75, 0, 69.5, 1, { type: Physics.Body.b2_staticBody, 'user_data': { 'fill_color': 'rgba(204,237,165,1)', 'border_color': '#7FE57F' } });
         //this.createBox(world, 36.50, 3.80, 1, 1, { 'user_data': { 'border_color': '#555' } });
         //this.createBox(world, 38.50, 3.80, 1, 1, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
         //this.createBall(world, 38.50, 3.80, 1, { 'user_data': { 'fill_color': 'rgba(204,100,0,0.3)', 'border_color': '#555' } });
@@ -136,6 +138,10 @@ export default class World {
     update() {
         var fps = 60;
         var timeStep = 1.0 / (fps * 0.8);
+
+        //move the box2d world ahead
+        world.Step(timeStep, 8, 3);
+        world.ClearForces();
 
         //redraw the world
         //convert the canvas coordinate directions to cartesian coordinate direction by translating and scaling
