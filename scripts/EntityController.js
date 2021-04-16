@@ -25,11 +25,12 @@ export default class EntityController {
         let width = $el.width();
         let height = $el.height();
 
+        this.CannonTransformed = false;
         this.controller = world;
 
         this.$view = $el // = $("#id-of-object")
         this.model = this._createModel(x, y, width, height, isStatic, options);
-        this.userData = { domObj: $el, width: width, height: height };
+        this.userData = { domObj: $el, width: width, height: height, isStatic: isStatic };
         this.model.m_userData = this.userData;
 
         // Reset DOM object position for use with CSS3 positioning
@@ -52,7 +53,7 @@ export default class EntityController {
         // Set type
         body_def.type = Physics.Body.b2_dynamicBody;
         if (isStatic) {
-            body_def.type = Physics.Body.b2_staticBody;
+            body_def.type = Physics.Body.b2_kinematicBody;
         }
 
         var fix_def = new Physics.FixtureDef();
@@ -66,7 +67,7 @@ export default class EntityController {
         fix_def.shape.SetAsBox(width / (2 * SCALE), height / (2 * SCALE));
 
         /*Fixed offset*/
-        body_def.position.Set((x + 70) / SCALE, (-y + YOffset) / SCALE);
+        body_def.position.Set(x / SCALE, (-y + YOffset) / SCALE);
 
         //body_def.type = options.type;
         body_def.userData = options.user_data;
@@ -79,12 +80,12 @@ export default class EntityController {
 
     render() {
         let mdl = this.model;
-        let screenX = 20 + (mdl.m_xf.position.x * SCALE);
+        let screenX = (mdl.m_xf.position.x * SCALE);
         let screenY = YOffset - (mdl.m_xf.position.y * SCALE);
 
         // Calculate translation and rotation
-        let x = Math.floor(screenX - mdl.m_userData.width);
-        let y = Math.floor(screenY - mdl.m_userData.height);
+        let x = Math.floor(screenX - mdl.m_userData.width / 2);
+        let y = Math.floor(screenY - mdl.m_userData.height / 2);
 
         // Rotation
         let sweepN2Pi = this.model.m_sweep.a + TWO_PI;
@@ -92,7 +93,46 @@ export default class EntityController {
         let sweepN2PIRadians = (sweepN2Pi % TWO_PI) * RAD_2_DEG;
         let rotDeg = Math.round(sweepN2PIRadians * 100) / 100;
 
-        // Update transforms
-        this.$view.css({ 'transform': `translate(${x}px, ${y}px) rotate(${rotDeg}deg)` });
+        if (mdl.m_userData.isStatic == false) {
+            // Update transforms
+            this.$view.css({ 'transform': `translate(${x}px, ${y}px) rotate(${rotDeg}deg)` });
+        } else {
+
+            // Check if cannon has been transformed
+            if (!this.CannonTransformed) {
+                // Update transform for cannon
+                this.$view.css({ 'transform': `translate(${x}px, ${y}px)` });
+                this.CannonTransformed = true;
+            }
+        }
+    }
+
+    rotateCannon(wMouseX, wMouseY) {
+
+        let mdl = this.model;
+        let screenX = (mdl.m_xf.position.x * SCALE);
+        let screenY = YOffset - (mdl.m_xf.position.y * SCALE);
+
+        // Calculate translation and rotation
+        let x = Math.floor(screenX - mdl.m_userData.width / 2);
+        let y = Math.floor(screenY - mdl.m_userData.height / 2);
+
+        // Vector between mouse and cannon
+        let newX = wMouseX - mdl.m_xf.position.x;
+        let newY = wMouseY - mdl.m_xf.position.y;
+
+        let angle = Math.atan2(newX, newY);
+        // Normalize vector
+        let directionX = Math.sqrt(newX);
+        let directionY = Math.sqrt(newY);
+
+        // Rotation
+        let sweepN2Pi = this.model.m_sweep.a + TWO_PI;
+
+        let sweepN2PIRadians = (sweepN2Pi % TWO_PI) * RAD_2_DEG;
+        let rotDeg = Math.round(sweepN2PIRadians * 100) / 100;
+
+        // Update transform for cannon
+        this.$view.css({ 'transform': `translate(${x}px, ${y}px) rotate(${angle}deg)` });
     }
 }

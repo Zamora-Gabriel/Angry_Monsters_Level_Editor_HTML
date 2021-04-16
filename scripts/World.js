@@ -67,58 +67,54 @@ export default class World {
         //this.createBox(world, 38.50, 3.80, 1, 1, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
         //this.createBall(world, 38.50, 3.80, 1, { 'user_data': { 'fill_color': 'rgba(204,100,0,0.3)', 'border_color': '#555' } });
         //this.createBall(world, 1, 3.80, 1, { 'user_data': { 'fill_color': 'rgba(204,100,0,0.3)', 'border_color': '#555' } });
-        this._draw_object();
 
         return world;
     }
-    _draw_object() {
-        //create some objects (DEBUG Purposes)
-        let thisItem = new EntityController(world, $("#CannonX"), false, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
-        entityList[0] = thisItem;
-    }
+
 
     //Create standard boxes of given height , width at x,y
     _createBox(world, x, y, width, height, options) {
-            //default setting
-            options = $.extend(true, {
-                'density': 1.0,
-                'friction': 1.0,
-                'restitution': 0.5,
+        //default setting
+        options = $.extend(true, {
+            'density': 1.0,
+            'friction': 1.0,
+            'restitution': 0.5,
 
-                'type': Physics.Body.b2_dynamicBody
-            }, options);
+            'type': Physics.Body.b2_dynamicBody
+        }, options);
 
-            var body_def = new Physics.BodyDef();
-            var fix_def = new Physics.FixtureDef();
-
-            fix_def.density = options.density;
-            fix_def.friction = options.friction;
-            fix_def.restitution = options.restitution;
-
-            fix_def.shape = new Physics.PolygonShape();
-
-            fix_def.shape.SetAsBox(width / 2, height / 2);
-
-            body_def.position.Set(x, y);
-
-            body_def.type = options.type;
-            body_def.userData = options.user_data;
-
-            var b = world.CreateBody(body_def);
-            var f = b.CreateFixture(fix_def);
-
-            return b;
-        }
-        //Function to create a round ball, sphere like object
-    _createBall(world, x, y, radius, options) {
         var body_def = new Physics.BodyDef();
         var fix_def = new Physics.FixtureDef();
+
+        fix_def.density = options.density;
+        fix_def.friction = options.friction;
+        fix_def.restitution = options.restitution;
+
+        fix_def.shape = new Physics.PolygonShape();
+
+        fix_def.shape.SetAsBox(width / 2, height / 2);
+
+        body_def.position.Set(x, y);
+
+        body_def.type = options.type;
+        body_def.userData = options.user_data;
+
+        var b = world.CreateBody(body_def);
+        var f = b.CreateFixture(fix_def);
+
+        return b;
+    }
+
+    //Function to create a round ball, sphere like object
+    _createBall(world, x, y, radius, options) {
+        let body_def = new Physics.BodyDef();
+        let fix_def = new Physics.FixtureDef();
 
         fix_def.density = options.density || 1.0;
         fix_def.friction = 0.5;
         fix_def.restitution = 0.5;
 
-        var shape = new Physics.CircleShape(radius);
+        let shape = new Physics.CircleShape(radius);
         fix_def.shape = shape;
 
         body_def.position.Set(x, y);
@@ -129,10 +125,32 @@ export default class World {
         body_def.type = Physics.Body.b2_dynamicBody;
         body_def.userData = options.user_data;
 
-        var b = world.CreateBody(body_def);
+        let b = world.CreateBody(body_def);
         b.CreateFixture(fix_def);
 
         return b;
+    }
+
+    // Create a line
+    drawline(startX, startY, endX, endY) {
+        let start = new Physics.Vec2(startX, startY);
+        let end = new Physics.Vec2(endX, endY);
+
+        let fixDef = new Physics.FixtureDef();
+        fixDef.shape = new Physics.PolygonShape();
+        fixDef.density = 1.0;
+        fixDef.friction = 0.5;
+        fixDef.restitution = .5;
+        fixDef.shape.SetAsArray([
+            start,
+            end
+        ], 2);
+        var bodyDef = new Physics.BodyDef();
+        bodyDef.type = Physics.Body.b2_staticBody;
+        bodyDef.position.Set(0, 0);
+        var line = world.CreateBody(bodyDef)
+        line.CreateFixture(fixDef);
+        return line;
     }
 
     update() {
@@ -142,6 +160,7 @@ export default class World {
         //move the box2d world ahead
         world.Step(timeStep, 8, 3);
         world.ClearForces();
+
 
         //redraw the world
         //convert the canvas coordinate directions to cartesian coordinate direction by translating and scaling

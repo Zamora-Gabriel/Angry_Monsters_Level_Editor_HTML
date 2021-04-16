@@ -93,15 +93,15 @@ export default class Level {
 
         // Build Cannon object
         let $option = $(`<div id="Cannon0" data-value="Cannon" class="rectangle cannon catapult draggable" 
-         style="height: 200px; width: 200px; position: absolute; margin: 0px; left: ${cannon.pos.x}; 
-         top: ${cannon.pos.y};" draggable="true"></div>`);
+         style="height: 200px; width: 200px; position: absolute; margin: 0px; left: 100px; 
+         top: 500px;" draggable="true"></div>`);
 
 
         // Add it to the edit window
         $editArea.append($option);
 
         // Render cannon as square
-        let thisItem = new EntityController(this.controller, $(`#Cannon0`), false, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
+        let thisItem = new EntityController(this.controller, $(`#Cannon0`), true, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
         this.entityList.push(thisItem);
 
     }
