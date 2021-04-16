@@ -66,7 +66,7 @@ export default class EntityController {
         fix_def.shape.SetAsBox(width / (2 * SCALE), height / (2 * SCALE));
 
         /*Fixed offset*/
-        body_def.position.Set(x / SCALE, (-y + YOffset) / SCALE);
+        body_def.position.Set((x + 70) / SCALE, (-y + YOffset) / SCALE);
 
         //body_def.type = options.type;
         body_def.userData = options.user_data;
@@ -79,7 +79,7 @@ export default class EntityController {
 
     render() {
         let mdl = this.model;
-        let screenX = mdl.m_xf.position.x * SCALE;
+        let screenX = 20 + (mdl.m_xf.position.x * SCALE);
         let screenY = YOffset - (mdl.m_xf.position.y * SCALE);
 
         // Calculate translation and rotation

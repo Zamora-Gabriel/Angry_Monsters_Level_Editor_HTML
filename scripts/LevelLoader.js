@@ -35,7 +35,7 @@ export default class LevelLoader {
 
         // Build Cannon object
         let $option = $(`<div data-value="Cannon" class="rectangle cannon catapult draggable" 
-         style="height: 300px; width: 300px; position: absolute; margin: 0px; left: ${cannon.pos.x}; 
+         style="height: 200px; width: 200px; position: absolute; margin: 0px; left: ${cannon.pos.x}; 
          top: ${cannon.pos.y};" draggable="true"></div>`);
 
         // Add it to the edit window
