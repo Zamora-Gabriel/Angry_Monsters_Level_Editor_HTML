@@ -26,8 +26,7 @@ export default class Splash {
         })
         .catch(error => { this._showErrorDialog(error) });
 
-        this.updateCellHandlers();
-        
+        this.updateCellHandlers();        
     }
 
     _populateLevelList() {
@@ -51,7 +50,6 @@ export default class Splash {
                 })
         })
     }
-
 
     _updateLevelList(levelList) {
         //Fill the level list
@@ -86,12 +84,10 @@ export default class Splash {
         }) ;
     }
 
-
     run() {
         game.run();
     }
          
-
     _showErrorDialog(error) {
         // Not found user error
         if (error == 2) { alert("User is not found in the server"); }
@@ -100,9 +96,5 @@ export default class Splash {
         alert("Data couldn't be loaded");
     }
   
-
-
-
-    
 
 }

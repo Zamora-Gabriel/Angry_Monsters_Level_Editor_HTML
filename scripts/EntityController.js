@@ -109,6 +109,7 @@ export default class EntityController {
 
     rotateCannon(wMouseX, wMouseY) {
 
+        console.log("rotatecanon")
         let mdl = this.model;
         let screenX = (mdl.m_xf.position.x * SCALE);
         let screenY = YOffset - (mdl.m_xf.position.y * SCALE);
@@ -140,5 +141,9 @@ export default class EntityController {
 
     GetAngle() {
         return this.model.GetAngle();
+    }
+
+    AddInpmulse(){
+       // this.model.ApplyImpulse(Physics.Vec2,rotation);
     }
 }

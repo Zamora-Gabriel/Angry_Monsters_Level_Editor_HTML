@@ -27,6 +27,7 @@ export default class Game {
         this.lastUpdate = 0;
         this.entityList = [];
         this.world = new World();
+        this.gameWorld = this.world.GetWorld();
 
         // State machine for the game
         this.gameState = GameState.BEGIN;
@@ -39,7 +40,7 @@ export default class Game {
         this.userID = 'pg20gabriel';
         this.levelName =userPickedLevel; //'TestLevel';
 
-        this.currentLevel = new Level(this.world.GetWorld(), this.levelName, 'pg20gabriel');
+        this.currentLevel = new Level(this.gameWorld, this.levelName, 'pg20gabriel');
         this.currentLevel.load()
             .then(levelData => {
 
@@ -52,10 +53,6 @@ export default class Game {
             $('.splash-screen').show();
         });
     }
-
-
-   
-
 
     checkState() {
         if (this.gameState == GameState.BEGIN) {
@@ -95,7 +92,7 @@ export default class Game {
 
         let deltaTime = timestep - this.lastUpdate;
 
-        $("#fireBttn").on("click", event => this._instantiateObject());
+        $("#fireBttn").off().on("click", event => this._instantiateObject());
         this.CheckMouse();
         this.checkState();
         this.update(deltaTime);
@@ -117,8 +114,8 @@ export default class Game {
     }
 
     _instantiateObject() {
-
-        if (!wasObjectAdded) {
+            console.log("fire");
+     //   if (!wasObjectAdded) {
 
             // Get aim coordinates for the shooting
             let yCoordinates = $("#Aiming").offset().top - 100;
@@ -137,37 +134,45 @@ export default class Game {
             // Add it to the edit window
             $("#window-ed").append($option);
 
-            let newEntity = new EntityController(this.world.GetWorld(), $(`#CannonBall`), true, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
-            this.entityList.push(newEntity);
-            wasObjectAdded = true;
-        }
+            let bullet = new EntityController(this.world.GetWorld(), $(`#CannonBall`), true, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
+            
+
+            let testBullet = this.world._createBall(this.world.GetWorld(), 60,80,2,2,{ 'user_data': { 'fill_color': 'rgba(255,255,255,1)', 'border_color': '#555' }} );
+            this.entityList.push(bullet);
+      //      wasObjectAdded = true;
+     //   }
     }
 
     CheckMouse() {
-        $("#canvas")
-            .on("mousedown", event => {
+        $("#canvas").off()
+            .on("click", event => {
                 clicked = true;
 
                 // Get mouse coordinates substracting the area's offset
                 this.mouseCoordX = event.pageX - $("#canvas").offset().left;
                 this.mouseCoordY = event.pageY - $("#canvas").offset().top;
-
+                
                 // Translate to world coordinates
                 let worldMouseX = (this.mouseCoordX) / SCALE;
                 let worldMouseY = (-this.mouseCoordY + 620) / SCALE;
-
+         
                 // DEBUG: Get Cannon's position
                 let cannonX = $("#Cannon0").position().left / 2;
-                let cannonY = $("#Cannon0").position().top / 2;
+                let cannonY = $("#Cannon0").position().top / 2;           
 
                 let worldCannonX = (cannonX) / SCALE;
                 let worldCannonY = (-cannonY + 620) / SCALE;
-
+                
+                
+                console.log("MOUSECoord x, y:",this.mouseCoordX,this.mouseCoordY);
+                console.log("CANNONCoordx, y",cannonX,cannonY);
+                console.log("worldCannon x, y:",worldCannonX,worldCannonY);
+                console.log("worldMouse x, y:",worldMouseX,worldMouseY);
                 let x = Math.floor(worldCannonX - $("#Cannon0").width() / 2);
                 let y = Math.floor(worldCannonY - $("#Cannon0").height() / 2);
 
                 // Line, debug purposes
-                this.world.drawline(x, y, worldMouseX, worldMouseY);
+              // this.world.drawline(x, y, worldMouseX, worldMouseY);
 
                 // Rotation of the cannon
                 this.entityList[0].rotateCannon(worldMouseX, worldMouseY);

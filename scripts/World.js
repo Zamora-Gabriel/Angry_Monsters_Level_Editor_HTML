@@ -49,7 +49,7 @@ export default class World {
         //Gravity vector x, y - 10 m/s2 - thats earth!!
         var gravity = new Physics.Vec2(0, -10);
 
-        world = new Physics.World(gravity, true);
+        let newWorld = new Physics.World(gravity, true);
 
         //setup debug draw
         var debugDraw = new Physics.DebugDraw();
@@ -59,21 +59,21 @@ export default class World {
         debugDraw.SetLineThickness(1.0);
         debugDraw.SetFlags(Physics.DebugDraw.e_shapeBit | Physics.DebugDraw.e_jointBit);
 
-        world.SetDebugDraw(debugDraw);
+        newWorld.SetDebugDraw(debugDraw);
 
         //create some objects
-        ground = this._createBox(world, 34.75, 0, 69.5, 1, { type: Physics.Body.b2_staticBody, 'user_data': { 'fill_color': 'rgba(204,237,165,1)', 'border_color': '#7FE57F' } });
+        ground = this._createBox(newWorld, 34.75, 0, 69.5, 1, { type: Physics.Body.b2_staticBody, 'user_data': { 'fill_color': 'rgba(204,237,165,1)', 'border_color': '#7FE57F' } });
         //this.createBox(world, 36.50, 3.80, 1, 1, { 'user_data': { 'border_color': '#555' } });
         //this.createBox(world, 38.50, 3.80, 1, 1, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
-        //this.createBall(world, 38.50, 3.80, 1, { 'user_data': { 'fill_color': 'rgba(204,100,0,0.3)', 'border_color': '#555' } });
+        this._createBall(newWorld, 38.50, 3.80, 1, { 'user_data': { 'fill_color': 'rgba(204,100,0,0.3)', 'border_color': '#555' } });
         //this.createBall(world, 1, 3.80, 1, { 'user_data': { 'fill_color': 'rgba(204,100,0,0.3)', 'border_color': '#555' } });
 
-        return world;
+        return newWorld;
     }
 
 
     //Create standard boxes of given height , width at x,y
-    _createBox(world, x, y, width, height, options) {
+    _createBox(wd, x, y, width, height, options) {
         //default setting
         options = $.extend(true, {
             'density': 1.0,
@@ -99,14 +99,14 @@ export default class World {
         body_def.type = options.type;
         body_def.userData = options.user_data;
 
-        var b = world.CreateBody(body_def);
+        var b = wd.CreateBody(body_def);
         var f = b.CreateFixture(fix_def);
 
         return b;
     }
 
     //Function to create a round ball, sphere like object
-    _createBall(world, x, y, radius, options) {
+    _createBall(wd, x, y, radius, options) {
         let body_def = new Physics.BodyDef();
         let fix_def = new Physics.FixtureDef();
 
@@ -125,7 +125,7 @@ export default class World {
         body_def.type = Physics.Body.b2_dynamicBody;
         body_def.userData = options.user_data;
 
-        let b = world.CreateBody(body_def);
+        let b = wd.CreateBody(body_def);
         b.CreateFixture(fix_def);
 
         return b;
