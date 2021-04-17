@@ -22,7 +22,7 @@ let wasObjectAdded = false;
 
 export default class Game {
 
-    constructor() {
+    constructor(userPickedLevel) {
         // put all the UI and setup here
         this.lastUpdate = 0;
         this.entityList = [];
@@ -37,9 +37,9 @@ export default class Game {
 
         // TODO: Find a way for user to change level or user id
         this.userID = 'pg20gabriel';
-        this.levelName = 'TestLevel';
+        this.levelName =userPickedLevel; //'TestLevel';
 
-        this.currentLevel = new Level(this.world.GetWorld(), 'TestLevel', 'pg20gabriel');
+        this.currentLevel = new Level(this.world.GetWorld(), this.levelName, 'pg20gabriel');
         this.currentLevel.load()
             .then(levelData => {
 
@@ -48,7 +48,14 @@ export default class Game {
             });
 
         // add all UI handlers here
+        $("#back-to-splash").on("click", event => {
+            $('.splash-screen').show();
+        });
     }
+
+
+   
+
 
     checkState() {
         if (this.gameState == GameState.BEGIN) {
