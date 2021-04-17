@@ -94,7 +94,8 @@ export default class Level {
         // Build Cannon object
         let $option = $(`<div id="Cannon0" data-value="Cannon" class="rectangle cannon catapult draggable" 
          style="height: 200px; width: 200px; position: absolute; margin: 0px; left: 100px; 
-         top: 500px;" draggable="true"></div>`);
+         top: 500px;" draggable="true"><div id="Aiming" class="round brachy" style="position: absolute; width: 50px; height: 50px;
+         left: 250px; top: 0px;"></div>`);
 
 
         // Add it to the edit window
