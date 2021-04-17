@@ -121,18 +121,24 @@ export default class EntityController {
         let newX = wMouseX - mdl.m_xf.position.x;
         let newY = wMouseY - mdl.m_xf.position.y;
 
-        let angle = Math.atan2(newX, newY);
+        let angleInRadians = Math.atan2(newY, newX);
+
         // Normalize vector
         let directionX = Math.sqrt(newX);
         let directionY = Math.sqrt(newY);
 
         // Rotation
-        let sweepN2Pi = this.model.m_sweep.a + TWO_PI;
+        mdl.SetAngle(angleInRadians);
 
-        let sweepN2PIRadians = (sweepN2Pi % TWO_PI) * RAD_2_DEG;
+        let sweepN2PIRadians = (-angleInRadians) * RAD_2_DEG;
         let rotDeg = Math.round(sweepN2PIRadians * 100) / 100;
 
+
         // Update transform for cannon
-        this.$view.css({ 'transform': `translate(${x}px, ${y}px) rotate(${angle}deg)` });
+        this.$view.css({ 'transform': `translate(${x}px, ${y}px) rotate(${rotDeg}deg)` });
+    }
+
+    GetAngle() {
+        return this.model.GetAngle();
     }
 }

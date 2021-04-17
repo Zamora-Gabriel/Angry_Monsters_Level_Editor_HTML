@@ -15,6 +15,8 @@ const GameState = {
 
 const SCALE = 20;
 
+const RAD_2_DEG = 180 / Math.PI;
+
 let clicked = false;
 let wasObjectAdded = false;
 
@@ -50,13 +52,13 @@ export default class Game {
 
     checkState() {
         if (this.gameState == GameState.BEGIN) {
-            console.log("Nice");
+            console.log("Begin state");
             this.gameState = GameState.WAIT;
         }
 
         if (this.gameState == GameState.WAIT) {
             if (this._printMouseCoord()) {
-
+                // Wait for shooting state
             }
 
             /*if () {
@@ -103,7 +105,7 @@ export default class Game {
 
         if (clicked == true) {
             // TODO: shoot angle
-            console.log(`Mouse x is: ${this.mouseCoordX}, Mouse Y is: ${this.mouseCoordY}`);
+            //console.log(`Mouse x is: ${this.mouseCoordX}, Mouse Y is: ${this.mouseCoordY}`);
         }
     }
 
@@ -111,9 +113,19 @@ export default class Game {
 
         if (!wasObjectAdded) {
 
+            // Get aim coordinates for the shooting
+            let yCoordinates = $("#Aiming").offset().top - 100;
+            let xCoordinates = $("#Aiming").offset().left;
+
+            // get angle from the cannon
+            let rotationInRad = this.entityList[0].GetAngle();
+
+            let rotationInDeg = rotationInRad * RAD_2_DEG;
+
+            // Create new cannonball
             let $option = $(`<div id="CannonBall" data-value="Cannonball" class="round ball object draggable" 
-            style="height: 70px; width: 70px; top: ${this.mouseCoordY}px; 
-            left: ${this.mouseCoordX}px; position: absolute; margin: 0px;" draggable="true">`);
+            style="height: 70px; width: 70px; top: ${yCoordinates}px; 
+            left: ${xCoordinates}px; position: absolute; margin: 0px;" draggable="true">`);
 
             // Add it to the edit window
             $("#window-ed").append($option);
@@ -125,20 +137,30 @@ export default class Game {
     }
 
     CheckMouse() {
-        $("#canvas").on("mousedown", event => {
+        $("#canvas")
+            .on("mousedown", event => {
                 clicked = true;
+
+                // Get mouse coordinates substracting the area's offset
                 this.mouseCoordX = event.pageX - $("#canvas").offset().left;
                 this.mouseCoordY = event.pageY - $("#canvas").offset().top;
+
+                // Translate to world coordinates
                 let worldMouseX = (this.mouseCoordX) / SCALE;
                 let worldMouseY = (-this.mouseCoordY + 620) / SCALE;
 
-                let cannonX = $("#Cannon0").position().left;
-                let cannonY = $("#Cannon0").position().top;
+                // DEBUG: Get Cannon's position
+                let cannonX = $("#Cannon0").position().left / 2;
+                let cannonY = $("#Cannon0").position().top / 2;
 
                 let worldCannonX = (cannonX) / SCALE;
                 let worldCannonY = (-cannonY + 620) / SCALE;
+
+                let x = Math.floor(worldCannonX - $("#Cannon0").width() / 2);
+                let y = Math.floor(worldCannonY - $("#Cannon0").height() / 2);
+
                 // Line, debug purposes
-                //this.world.drawline(worldCannonX, worldCannonY, worldMouseX, worldMouseY);
+                this.world.drawline(x, y, worldMouseX, worldMouseY);
 
                 // Rotation of the cannon
                 this.entityList[0].rotateCannon(worldMouseX, worldMouseY);
