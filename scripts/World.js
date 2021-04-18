@@ -63,10 +63,10 @@ export default class World {
 
         //create some objects
         ground = this._createBox(newWorld, 34.75, 0, 69.5, 1, { type: Physics.Body.b2_staticBody, 'user_data': { 'fill_color': 'rgba(204,237,165,1)', 'border_color': '#7FE57F' } });
-        //this.createBox(world, 36.50, 3.80, 1, 1, { 'user_data': { 'border_color': '#555' } });
-        //this.createBox(world, 38.50, 3.80, 1, 1, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
-        this._createBall(newWorld, 38.50, 3.80, 1, { 'user_data': { 'fill_color': 'rgba(204,100,0,0.3)', 'border_color': '#555' } });
-        //this.createBall(world, 1, 3.80, 1, { 'user_data': { 'fill_color': 'rgba(204,100,0,0.3)', 'border_color': '#555' } });
+        //this._createBox(world, 36.50, 3.80, 1, 1, { 'user_data': { 'border_color': '#555' } });
+        //this._createBox(world, 38.50, 3.80, 1, 1, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
+        //this._createBall(newWorld, 38.50, 3.80, 1, { 'user_data': { 'fill_color': 'rgba(204,100,0,0.3)', 'border_color': '#555' } });
+        //this._createBall(world, 1, 3.80, 1, { 'user_data': { 'fill_color': 'rgba(204,100,0,0.3)', 'border_color': '#555' } });
 
         return newWorld;
     }
@@ -83,9 +83,10 @@ export default class World {
             'type': Physics.Body.b2_dynamicBody
         }, options);
 
-        var body_def = new Physics.BodyDef();
-        var fix_def = new Physics.FixtureDef();
+        let body_def = new Physics.BodyDef();
+        let fix_def = new Physics.FixtureDef();
 
+        // Build Fixture
         fix_def.density = options.density;
         fix_def.friction = options.friction;
         fix_def.restitution = options.restitution;
@@ -94,13 +95,15 @@ export default class World {
 
         fix_def.shape.SetAsBox(width / 2, height / 2);
 
+        // Build body
         body_def.position.Set(x, y);
 
         body_def.type = options.type;
         body_def.userData = options.user_data;
 
-        var b = wd.CreateBody(body_def);
-        var f = b.CreateFixture(fix_def);
+        // Create body
+        let b = wd.CreateBody(body_def);
+        let f = b.CreateFixture(fix_def);
 
         return b;
     }
@@ -179,5 +182,9 @@ export default class World {
 
         //call this function again after 1/60 seconds or 16.7ms
         setTimeout(this.update, 1000 / fps);
+    }
+
+    DestroyObject(body) {
+        world.DestroyBody(body);
     }
 }

@@ -18,28 +18,35 @@ const SCALE = 20;
 const YOffset = 620; // Offset for the translation between Y coordinates in screen and physics World
 
 export default class EntityController {
-    constructor(world, $el, isStatic, options) {
+    constructor(world, $el, isKinematic, isRound, options) {
 
         let x = $el.position().left; // Hardcoded data, TODO: Check elements parameters
         let y = $el.position().top;
         let width = $el.width();
         let height = $el.height();
+        this.model;
 
         this.CannonTransformed = false;
         this.controller = world;
 
         this.$view = $el // = $("#id-of-object")
-        this.model = this._createModel(x, y, width, height, isStatic, options);
-        this.userData = { domObj: $el, width: width, height: height, isStatic: isStatic };
+        if (!isRound) {
+            this.model = this._createModel(x, y, width, height, isKinematic, options);
+        } else {
+            this.model = this._createBall(x, y, options);
+        }
+        this.userData = { domObj: $el, width: width, height: height, isKinematic: isKinematic };
         this.model.m_userData = this.userData;
 
         // Reset DOM object position for use with CSS3 positioning
         this.$view.css({ 'left': '0px', 'top': '0px' });
     }
 
+    GetModel() {
+        return this.model;
+    }
 
-
-    _createModel(x, y, width, height, isStatic, options) {
+    _createModel(x, y, width, height, isKinematic, options) {
 
         //default setting
         options = $.extend(true, {
@@ -52,7 +59,7 @@ export default class EntityController {
 
         // Set type
         body_def.type = Physics.Body.b2_dynamicBody;
-        if (isStatic) {
+        if (isKinematic) {
             body_def.type = Physics.Body.b2_kinematicBody;
         }
 
@@ -78,6 +85,33 @@ export default class EntityController {
         return body;
     }
 
+    //Function to create a round ball, sphere like object
+    _createBall(x, y, options) {
+        let body_def = new Physics.BodyDef();
+        let fix_def = new Physics.FixtureDef();
+        let radius = 1.5;
+
+        fix_def.density = options.density || 1.0;
+        fix_def.friction = 0.5;
+        fix_def.restitution = 0.5;
+
+        let shape = new Physics.CircleShape(radius);
+        fix_def.shape = shape;
+
+        body_def.position.Set(x / SCALE, (-y + YOffset) / SCALE);
+
+        body_def.linearDamping = 0.0;
+        body_def.angularDamping = 0.0;
+
+        body_def.type = Physics.Body.b2_dynamicBody;
+        body_def.userData = options.user_data;
+
+        let b = this.controller.CreateBody(body_def);
+        b.CreateFixture(fix_def);
+
+        return b;
+    }
+
     render() {
         let mdl = this.model;
         let screenX = (mdl.m_xf.position.x * SCALE);
@@ -93,7 +127,7 @@ export default class EntityController {
         let sweepN2PIRadians = (sweepN2Pi % TWO_PI) * RAD_2_DEG;
         let rotDeg = Math.round(sweepN2PIRadians * 100) / 100;
 
-        if (mdl.m_userData.isStatic == false) {
+        if (mdl.m_userData.isKinematic == false) {
             // Update transforms
             this.$view.css({ 'transform': `translate(${x}px, ${y}px) rotate(${rotDeg}deg)` });
         } else {
@@ -143,7 +177,7 @@ export default class EntityController {
         return this.model.GetAngle();
     }
 
-    AddInpmulse(){
-       // this.model.ApplyImpulse(Physics.Vec2,rotation);
+    AddImpulse() {
+        // this.model.ApplyImpulse(Physics.Vec2,rotation);
     }
 }

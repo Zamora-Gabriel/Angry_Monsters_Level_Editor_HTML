@@ -4,9 +4,9 @@
 import Request from './Request.js'
 import EntityController from './EntityController.js'
 
-var objectId = 0;
+let objectId = 0;
 
-var targetId = 0;
+let targetId = 0;
 
 // Levels to the game
 export default class Level {
@@ -15,6 +15,12 @@ export default class Level {
         this.userName = user;
         this.controller = world;
         this.entityList = [];
+        this.levelInformation = {};
+    }
+
+    GetLevelInfo() {
+        // get the level information
+        return this.levelInformation;
     }
 
     load() {
@@ -50,8 +56,8 @@ export default class Level {
             //No error
             this.__loadLevelRetrieved(data.payload);
 
-            // TODO: change background after level is loaded
-
+            // Change background after level is loaded
+            this.__changeBckg(data.payload);
 
             return this.entityList;
         }
@@ -59,6 +65,23 @@ export default class Level {
         alert("Level couldn't be found on server");
 
         return this.entityList;
+    }
+
+    __changeBckg(payload) {
+        // Parse to JSON the payload
+        payload = JSON.parse(payload);
+
+        // get the background
+        console.log(`${payload.background}`);
+
+        // Get edit-window's classes
+        let $editWin = $("#window-ed");
+        let classList = $editWin.attr("class");
+        let classArr = classList.split(/\s+/);
+
+        // Change background
+        $editWin.removeClass(classArr[1]);
+        $editWin.addClass(payload.background);
     }
 
 
@@ -69,7 +92,7 @@ export default class Level {
         this.__GetLevelInfo(payload);
 
         // Load cannon to level
-        this.__LoadCannon(payload.catapult);
+        this.__LoadCannon();
 
         // Fill for entityList
         this.__FillEditArea(payload.entityLists);
@@ -78,15 +101,14 @@ export default class Level {
 
     __GetLevelInfo(payload) {
 
-        let name = payload.name;
-        let bckg = payload.background;
-        let ammo = payload.ammo;
-        let oneStar = payload.star1;
-        let twoStar = payload.star2;
-        let threeStar = payload.star3;
+        this.levelInformation["name"] = payload.name;
+        this.levelInformation["ammo"] = payload.ammo;
+        this.levelInformation["oneStar"] = payload.star1;
+        this.levelInformation["twoStar"] = payload.star2;
+        this.levelInformation["threeStar"] = payload.star3;
     }
 
-    __LoadCannon(cannon) {
+    __LoadCannon() {
         let $editArea = $("#window-ed");
         // Empty current edit area
         $editArea.empty();
@@ -102,7 +124,7 @@ export default class Level {
         $editArea.append($option);
 
         // Render cannon as square
-        let thisItem = new EntityController(this.controller, $(`#Cannon0`), true, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
+        let thisItem = new EntityController(this.controller, $(`#Cannon0`), true, false, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
         this.entityList.push(thisItem);
 
     }
@@ -122,7 +144,7 @@ export default class Level {
             // Add it to the edit window
             $editArea.append($option);
 
-            let thisItem = new EntityController(this.controller, $(`#Object${objectId}`), false, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
+            let thisItem = new EntityController(this.controller, $(`#Object${objectId}`), false, false, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
             this.entityList.push(thisItem);
 
             objectId++;
@@ -139,7 +161,7 @@ export default class Level {
             // Add it to the edit window
             $editArea.append($option);
 
-            let thisItem = new EntityController(this.controller, $(`#Target${targetId}`), false, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
+            let thisItem = new EntityController(this.controller, $(`#Target${targetId}`), false, false, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
             this.entityList.push(thisItem)
 
             targetId++;
