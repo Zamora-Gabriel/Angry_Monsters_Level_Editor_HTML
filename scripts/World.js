@@ -10,10 +10,11 @@ const TIMESTEP = 1 / 60;
 const VELOCITY = 10;
 const POSITION = 10;
 
-// TODO: change this variables, maybe place them on the constructor?
+// TODO: change this variables
 var world;
 var ctx;
-var ground;
+let ground;
+let rightWall;
 var canvas_width;
 var canvas_height;
 var canvas_height_m;
@@ -63,6 +64,8 @@ export default class World {
 
         //create some objects
         ground = this._createBox(newWorld, 34.75, 0, 69.5, 1, { type: Physics.Body.b2_staticBody, 'user_data': { 'fill_color': 'rgba(204,237,165,1)', 'border_color': '#7FE57F' } });
+        rightWall = this._createBox(newWorld, 69.5, 15.5, 1, 31, { type: Physics.Body.b2_staticBody, 'user_data': { 'fill_color': 'rgba(204,237,165,1)', 'border_color': '#7FE57F' } });
+
         //this._createBox(world, 36.50, 3.80, 1, 1, { 'user_data': { 'border_color': '#555' } });
         //this._createBox(world, 38.50, 3.80, 1, 1, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
         //this._createBall(newWorld, 38.50, 3.80, 1, { 'user_data': { 'fill_color': 'rgba(204,100,0,0.3)', 'border_color': '#555' } });
@@ -172,13 +175,6 @@ export default class World {
         ctx.scale(1, -1);
         world.DrawDebugData();
         ctx.restore();
-
-        ctx.font = 'bold 18px arial';
-        ctx.textAlign = 'center';
-        ctx.fillStyle = '#fff';
-        ctx.fillText('Box2d MouseJoint example in Javascript', canvas_width / 2, 20);
-        ctx.font = 'bold 14px arial';
-        ctx.fillText('Click on any object and drag it', canvas_width / 2, 40);
 
         //call this function again after 1/60 seconds or 16.7ms
         setTimeout(this.update, 1000 / fps);

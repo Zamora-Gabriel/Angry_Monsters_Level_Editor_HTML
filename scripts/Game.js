@@ -29,6 +29,7 @@ export default class Game {
         this.entityList = [];
         this.world = new World();
         this.gameWorld = this.world.GetWorld();
+        this.shootAngle = 0;
 
         // level information
         this.ammo = 0;
@@ -192,9 +193,16 @@ export default class Game {
 
         this.cannonball = this.entityList[this.cannonballIndex].GetModel();
 
+        // Shoot cannonball
+        this._Shoot();
+
         // Decrease the available ammo that user has to shoot
         this.ammo--;
         console.log(`${this.ammo} Shots left`);
+    }
+
+    _Shoot() {
+        this.entityList[this.cannonballIndex].AddImpulse(this.shootAngle);
     }
 
     CheckMouse() {
@@ -233,7 +241,7 @@ export default class Game {
                 // this.world.drawline(x, y, worldMouseX, worldMouseY);
 
                 // Rotation of the cannon
-                this.entityList[0].rotateCannon(worldMouseX, worldMouseY);
+                this.shootAngle = this.entityList[0].rotateCannon(worldMouseX, worldMouseY);
             })
             .on("mouseup", event => {
                 clicked = false;
