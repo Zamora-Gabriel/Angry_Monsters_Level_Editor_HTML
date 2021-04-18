@@ -3,7 +3,7 @@
 'use strict';
 
 import Physics from './libs/Physics.js';
-
+import ContactListener from './ContactListener.js';
 import EntityController from './EntityController.js';
 
 const TIMESTEP = 1 / 60;
@@ -37,13 +37,55 @@ export default class World {
         canvas_width = parseInt(canvas.attr('width'));
         canvas_height = parseInt(canvas.attr('height'));
         canvas_height_m = canvas_height / scale;
-
+        this._addListener();
         //start update
         this.update();
     }
 
     GetWorld() {
         return world;
+    }
+    _addListener(){
+        const listener =new Physics.Listener;
+
+        listener.BeginContact = contact =>{
+            console.log("listenerworks");
+
+
+            let thingA = contact.GetFixtureA().GetBody().GetUserData();
+            let thingB = contact.GetFixtureB().GetBody().GetUserData();
+ 
+            if ((thingA == null) || (thingB == null))
+            {
+                console.log("Nothing collide"); 
+                return;
+            }
+
+
+  //         let idA = thingA.$element.attr('id');
+    //        let idB = thingB.$element.attr('id');
+
+            if ((thingA.isBall == true) || (thingB.isTarget == true)) {
+                console.log("Obstacle was hit by the ball"); 
+                //GET THE target ID, then destory the target  
+               let targetId = thingB.domObj;
+            //   DestroyTarget(targetId, thingB's body); look up the cannon ball to see how it get destoried.
+            
+            };
+            if ((thingA.isTarget==true) || (thingB.isBall == true)) {
+                console.log("Obstacle was hit by the ball");     
+            
+            };
+//    if ((thingA.tag == 'box') || (thingB.tag == 'ball')) {
+      //  console.log("Obstacle was hit by the ball");     };
+
+
+        };
+        listener.PostSolve = (contact, impulse)=>{
+
+        };
+
+        world.SetContactListener(listener);
     }
 
     _createWorld() {
@@ -73,7 +115,6 @@ export default class World {
 
         return newWorld;
     }
-
 
     //Create standard boxes of given height , width at x,y
     _createBox(wd, x, y, width, height, options) {
@@ -132,6 +173,7 @@ export default class World {
         body_def.userData = options.user_data;
 
         let b = wd.CreateBody(body_def);
+        
         b.CreateFixture(fix_def);
 
         return b;

@@ -118,7 +118,6 @@ export default class Game {
     }
 
     render(deltaTime) {
-
         // Render objects and targets within the entity list
         this.entityList.forEach(entity => {
             entity.render(deltaTime);
