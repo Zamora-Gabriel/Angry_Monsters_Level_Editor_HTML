@@ -13,6 +13,8 @@ const TWO_PI = 2 * Math.PI;
 
 const RAD_2_DEG = 180 / Math.PI;
 
+const DEG_2_RAD = Math.PI / 180;
+
 const SCALE = 20;
 
 const YOffset = 620; // Offset for the translation between Y coordinates in screen and physics World
@@ -24,7 +26,10 @@ export default class EntityController {
         let y = $el.position().top;
         let width = $el.width();
         let height = $el.height();
+        this.isTarget = false;
         this.model;
+
+        this._checkIfTarget($el);
 
         this.CannonTransformed = false;
         this.controller = world;
@@ -32,14 +37,27 @@ export default class EntityController {
         this.$view = $el // = $("#id-of-object")
         if (!isRound) {
             this.model = this._createModel(x, y, width, height, isKinematic, options);
+            this.userData = { domObj: $el, width: width, height: height, isKinematic: isKinematic, isBall: false, isTarget: this.isTarget };
         } else {
             this.model = this._createBall(x, y, options);
+            this.userData = { domObj: $el, width: width, height: height, isKinematic: isKinematic, isBall: true, isTarget: false };
         }
-        this.userData = { domObj: $el, width: width, height: height, isKinematic: isKinematic };
         this.model.m_userData = this.userData;
 
         // Reset DOM object position for use with CSS3 positioning
         this.$view.css({ 'left': '0px', 'top': '0px' });
+    }
+
+    // Check if the object is a target
+    _checkIfTarget($el) {
+        // Get entity's classes
+        let classList = $el.attr("class");
+        let classArr = classList.split(/\s+/);
+
+        // Check object/target class
+        if (classArr[2] == 'target') {
+            this.isTarget = true;
+        }
     }
 
     GetModel() {
@@ -87,6 +105,14 @@ export default class EntityController {
 
     //Function to create a round ball, sphere like object
     _createBall(x, y, options) {
+
+        //default setting
+        options = $.extend(true, {
+            'density': 10.0,
+            'friction': 1.0,
+            'restitution': 0.5
+        }, options);
+
         let body_def = new Physics.BodyDef();
         let fix_def = new Physics.FixtureDef();
         let radius = 1.5;
@@ -168,16 +194,29 @@ export default class EntityController {
         let sweepN2PIRadians = (-angleInRadians) * RAD_2_DEG;
         let rotDeg = Math.round(sweepN2PIRadians * 100) / 100;
 
-
         // Update transform for cannon
         this.$view.css({ 'transform': `translate(${x}px, ${y}px) rotate(${rotDeg}deg)` });
+
+        return rotDeg;
     }
 
     GetAngle() {
         return this.model.GetAngle();
     }
 
-    AddImpulse() {
-        // this.model.ApplyImpulse(Physics.Vec2,rotation);
+    AddImpulse(degrees) {
+
+        console.log(`Shooting at angle ${-degrees}`);
+        // Convert from degrees to radians for physics world
+        let radians = -degrees * DEG_2_RAD;
+
+        let impulseForce = new Physics.Vec2(Math.cos( /*angle in radians*/ radians) * /*power*/ 1000,
+            Math.sin( /*angle in radians*/ radians) * /*power*/ 1000);
+
+        this.model.ApplyImpulse(impulseForce, this.model.GetWorldCenter());
+
+
+        this.model.SetAngularDamping(0.5);
+        this.model.SetLinearDamping(0.1);
     }
 }
