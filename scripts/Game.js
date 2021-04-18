@@ -97,7 +97,7 @@ export default class Game {
         }
 
         if (this.gameState == GameState.SHOOT) {
-            //this.Shoot();
+            //Shooting state
             if (!this.cannonball.IsAwake()) {
                 console.log("cannonball is asleep");
                 this._eraseCannonBall();
@@ -156,11 +156,6 @@ export default class Game {
         let yCoordinates = $("#Aiming").offset().top - 100;
         let xCoordinates = $("#Aiming").offset().left;
 
-        // get angle from the cannon
-        let rotationInRad = this.entityList[0].GetAngle();
-
-        let rotationInDeg = rotationInRad * RAD_2_DEG;
-
         // Create new cannonball
         let $option = $(`<div id="CannonBall" data-value="Cannonball" class="round ball object draggable" 
             style="height: 70px; width: 70px; top: ${yCoordinates}px; 
@@ -179,13 +174,7 @@ export default class Game {
                 }
             });
 
-
-        /*let testBullet = this.world._createBall(this.world.GetWorld(),
-            60,
-            80,
-            2,
-            2, { 'user_data': { 'fill_color': 'rgba(255,255,255,1)', 'border_color': '#555' } });
-        */
+        // Pushing the bullet's physical body controller to the entity list
         this.entityList.push(bullet);
 
         // get the cannonball index
@@ -198,6 +187,8 @@ export default class Game {
 
         // Decrease the available ammo that user has to shoot
         this.ammo--;
+
+        // TODO: UI REMAINING AMMO TEXT
         console.log(`${this.ammo} Shots left`);
     }
 
@@ -268,13 +259,10 @@ export default class Game {
 
     _GameOver() {
         // Endgame, go to score page
-        $(".play-now-btn").on('click', event => {
-            console.log("CLICKED");
-            const game = new Game();
-            // hide game
-            $('.game-screen').hide();
-            game.run();
 
-        });
+        console.log("Game over");
+        // hide game
+        // $('.game-screen').hide();
+
     }
 }

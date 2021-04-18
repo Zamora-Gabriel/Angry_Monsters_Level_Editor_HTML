@@ -210,8 +210,15 @@ export default class EntityController {
         // Convert from degrees to radians for physics world
         let radians = -degrees * DEG_2_RAD;
 
-        let impulseForce = new Physics.Vec2(Math.cos( /*angle in radians*/ radians) * /*power*/ 1000,
-            Math.sin( /*angle in radians*/ radians) * /*power*/ 1000);
+        // Base power
+        let power = 1400;
+
+        if (degrees > 50) {
+            power += 1000;
+        }
+
+        let impulseForce = new Physics.Vec2(Math.cos( /*angle in radians*/ radians) * /*power*/ power,
+            Math.sin( /*angle in radians*/ radians) * /*power*/ power);
 
         this.model.ApplyImpulse(impulseForce, this.model.GetWorldCenter());
 

@@ -180,7 +180,8 @@ export default class World {
         setTimeout(this.update, 1000 / fps);
     }
 
-    DestroyObject(body) {
+    DestroyObject(body /*, isTarget*/ ) {
+        // TODO: Figure adding score
         world.DestroyBody(body);
     }
 }
