@@ -1,11 +1,12 @@
-# *** PG20 Gabriel Zamora - Javascript Web Apps  - Level Editor ***
+# *** PG20 Haojun Liu, Daiyong Kim, Gabriel Zamora - Javascript Web Apps  - Angry Pigs Game ***
 ---------------------------------------
-<Gabriel Zamora>
-<22/03/2021>
+<Haojun Liu, Daiyong Kim, Gabriel Zamora>
+<19/04/2021>
 
-The projet is a level editor in which can be created objects and targets as well as saving levels and loading them. 
-Levels are created by submitting information for it including objects and targets that were dragged to the editor.
-The goal of this assignment is to apply client-server services as well as demonstrate the previous course experience by building a webpage.
+The projet is an Angry Birds style game in which the user can aim a cannon and shoot to structures trying to defeat targets.
+For this iteration, the game was required to be built with Javascript, html5, css and also using a physics engine called Box2d.
+The goal of this assignment is to apply the knowledge about Javascript and jquery as well as using different tools as the physics engine,
+in order to achieve the goal of making a playable game.
 
 [demo] (https://github.com/Zamora-Gabriel/PG20_Gabriel_JavascriptWebApps_A1) | [tutorial] (link)
 
@@ -31,7 +32,7 @@ Browse to demo link
 - Once in VSCode, go to the run and debug option and run the server
 
 - Open google chrome or microsoft edge and access to the next URL in parenthesis: 
-(http://localhost:3000/editor)
+(http://localhost:3000)
 
 - The demo should be running in the editor client
 
@@ -40,56 +41,39 @@ Browse to demo link
 
 - After the download/install steps, the demo should be shown on the given localhost.
 
-- The page has three main areas from left to right are: The level information, the edit field, and the object library
+- The page starts in the splash page
 
-For the Level information area:
+Splash Page:
 
-- The default username is the only one that can be accessed to, if it is changed, the page will not save, load, or get the objects or levels in server
+- The splash page has only one purpose, selecting previously built levels in order to play them.
 
-- Once launched the page, if the Update User Info button is clicked, the client will sent requests to get all Levels, objects, and targets
-as well as the page will start populating the object library with the targets and objects.
+- For now the game only features one username being: pg20gabriel
 
-- On the dropdown list below Levels tag, an existing level can be selected and after pressing the Load Level button, the edit field and the level information area will be
-loaded with the information of that level, placing the cannon/catapult, objects, targets, background and information such as the scores and max shots.
+- Select a level by clicking on the second field and choosing from the dropdown list a level by name.
 
-- The background has only two options constrained in the dropdown selector. If the background is changed manually, press the change background button for the new
-background to show on the edit field.
+- Once the desired level is selected, by pressing the button the game area will be displayed.
 
-- Once edited the values, press the save button in order to save the level, if the level name is equal to a previously loaded one, a message will appear
-if the user wants to overwrite the data of that level.
+For the game area:
 
-- Levels can be copied by loading a pre-existing level and changing the name. After doing that, just press save button and a the level will be copied.
+- In this part the player can aim the cannon by clicking anywhere on the game screen (With the background as a grassland or sea)
 
-- After hitting save, hit the update user info button to update all levels and the object library if any other object, target or level were created.
+- Once aimed, the player can press the shoot button located at the right side of the page.
 
-For the edit area:
+- A ball will be shot from the cannon and the player will not be able to shoot until that cannonball disappears.
 
-- Objects and targets can be dragged from the object library to the edit field and placed wherever the user may like.
+- The objective is defeating the target monsters to score and trying to get the highest score possible.
 
-- Also the cannon/catapult can be dragged and changed of place to match the user's tastes.
+- Once all the targets are defeated, the player can shoot the remaining cannonballs as part of his or her victory.
 
-- If the user wants to remove an object, just place the mouse over the desired to delete object and click the middle mouse to delete it.
+- The player can return to level selection (splash page) by clicking the top button called "Level-Pick".
 
-For the object library:
-
-- The user here can drag the objects and targets as mentioned previously but also can create new objects or targets with the existing textures and shapes in server.
-
-- To create a new object or target, the user must press the button that matches the entity to create. 
-
-- A pop up window will emerge and the object or target editor will show.
-
-- The user can load an object if the name is correctly typed, loading all the information that was saved on server.
-
-- A preview f the object may be shown by clicking the preview button.
-
-- Texture and shapes can be changed with the dropdown selectors for those properties.
-
-- Once finished editing or creating, press the save button and it will show a successful message if the save was correctly done. However, if the object or target
-already exists, an overwrite message will show and ask if the user wants to overwrite that file. 
+- After the game ends, a game over display will pop up showing the player's score.
 
 
 
 # *** Caveats ***
 ---------------------------------------
 
-- If a problem may occur in a browser, try a different one however the page was proved to run in Google Chrome and Microsoft Edge.
+- Missing animations
+
+- Missing Game over screen

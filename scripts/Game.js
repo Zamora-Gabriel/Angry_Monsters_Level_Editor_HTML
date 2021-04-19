@@ -81,6 +81,10 @@ export default class Game {
         // Save ammo for the level
         this.ammo = parseInt(levelInfo["ammo"], 10);
 
+
+        // display starting ammo
+        $(".ammo-text").text(`Remaining Ammo: ${this.ammo}`);
+
         // Save star values
         this.oneStar = parseInt(levelInfo["oneStar"], 10);
         this.twoStar = parseInt(levelInfo["twoStar"], 10);
@@ -105,7 +109,9 @@ export default class Game {
     }
 
     __addScore(scoreVal) {
-        this.score += scoreVal;
+        this.score += parseInt(scoreVal);
+        // Update score field
+        $(".score-text").text(`Score: ${this.score}`);
     }
 
     // State machine for the game function
@@ -213,8 +219,8 @@ export default class Game {
         // Decrease the available ammo that user has to shoot
         this.ammo--;
 
-        // TODO: UI REMAINING AMMO TEXT
-        console.log(`${this.ammo} Shots left`);
+        // Display remaining shots
+        $(".ammo-text").text(`Remaining Ammo: ${this.ammo}`);
     }
 
     _Shoot() {

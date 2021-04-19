@@ -11,6 +11,12 @@ header {
     justify-content: center;
 }
 
+.score-text,
+.ammo-text {
+    font-size: 3vh;
+    color: blanchedalmond;
+}
+
 .splash-screen {
     display: flex;
     flex-direction: column;
