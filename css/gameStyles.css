@@ -22,6 +22,30 @@ header {
     background: grey;
 }
 
+.end-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    position:absolute;
+    width: 300px;
+    height: 300px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    z-index: 9000;
+    background: grey;
+}
+.win-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    position:absolute;
+    width: 300px;
+    height: 300px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    z-index: 9000;
+    background: grey;
+}
 .game-screen section {
     background-color: gainsboro;
     overflow: hidden;

@@ -66,13 +66,17 @@ export default class World {
                 //GET THE target ID, then destory the target  
                let targetId = thingB.domObj;
                console.log(targetId);
-            //   DestroyTarget(targetId, thingB's body); look up the cannon ball to see how it get destoried.
-            
+               
+               _destoryTarget(thingB);
+               
+         
             };
             if ((thingA.isTarget==true) && (thingB.isBall == true)) {
                 console.log("Obstacle was hit by the ball");     
                 let targetId = thingA.domObj;
                 console.log(targetId);
+                world.DestroyObject(thingA);
+             //   _destoryTarget(thingA);
             };
 
             //when we delete the target, we have to update the score too..
@@ -83,6 +87,11 @@ export default class World {
         };
 
         world.SetContactListener(listener);
+    }
+
+    _destoryTarget(target)
+    {
+        
     }
 
     _createWorld() {
