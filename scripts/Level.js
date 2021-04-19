@@ -101,6 +101,7 @@ export default class Level {
 
     __GetLevelInfo(payload) {
 
+        // Save level information within the Level object
         this.levelInformation["name"] = payload.name;
         this.levelInformation["ammo"] = payload.ammo;
         this.levelInformation["oneStar"] = payload.star1;
@@ -116,7 +117,7 @@ export default class Level {
         // Build Cannon object
         let $option = $(`<div id="Cannon0" data-value="Cannon" class="rectangle cannon catapult draggable" 
          style="height: 200px; width: 200px; position: absolute; margin: 0px; left: 100px; 
-         top: 500px;" draggable="true"><div id="Aiming" class="round brachy" style="position: absolute; width: 50px; height: 50px;
+         top: 500px;" draggable="true"><div id="Aiming" class="round" style="position: absolute; width: 50px; height: 50px;
          left: 250px; top: 0px;"></div>`);
 
 

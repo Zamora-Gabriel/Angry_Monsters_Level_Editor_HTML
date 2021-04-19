@@ -11,8 +11,8 @@ const TIMESTEP = 1 / 60;
 const VELOCITY = 10;
 const POSITION = 10;
 
-// TODO: change this variables
-var world;
+// Variables
+let world;
 var ctx;
 let ground;
 let rightWall;
@@ -21,13 +21,15 @@ var canvas_height;
 var canvas_height_m;
 
 //box2d to canvas scale , therefor 1 metre of box2d = 20px of canvas :)
-var scale = 20;
-
-var entityList = []; // List of game objects
+const scale = 20;
 
 
 export default class World {
     constructor() {
+
+        this.entityList = []; // List of game objects
+        this.deleted = false; // flag to check if deleted
+        this.deleteIndex = 0; // index of deleted object
 
         world = this._createWorld();
 
@@ -44,33 +46,53 @@ export default class World {
         this.update();
     }
 
+    // Getters
     GetWorld() {
         return world;
     }
-    _addListener(){
-        const listener =new Physics.Listener;
 
-        listener.BeginContact = contact =>{
+    // Setters
+    SetEntities(entList) {
+        this.entityList = entList;
+    }
+
+    // Delete entity from the game
+    GetDeletedIndex() {
+        if (this.deleted) {
+            this.deleted = false;
+            return this.deleteIndex;
+        }
+
+        return null;
+    }
+
+    _addListener() {
+        const listener = new Physics.Listener;
+
+        listener.BeginContact = contact => {
             //console.log("listenerworks");
-            let thingA = contact.GetFixtureA().GetBody().GetUserData();
-            let thingB = contact.GetFixtureB().GetBody().GetUserData();
- 
-            if ((thingA == null) || (thingB == null))
-            {
-                console.log("Nothing collide"); 
+
+            // Get the bodies involved in collision
+            let aBody = contact.GetFixtureA().GetBody();
+            let bBody = contact.GetFixtureB().GetBody();
+
+            let thingA = aBody.GetUserData();
+            let thingB = bBody.GetUserData();
+
+            if ((thingA == null) || (thingB == null)) {
+                console.log("Nothing collide");
                 return;
             }
 
             if ((thingA.isBall == true) && (thingB.isTarget == true)) {
-                console.log("Obstacle was hit by the ball"); 
-                //GET THE target ID, then destory the target  
-               let targetId = thingB.domObj;
-               console.log(targetId);
-            //   DestroyTarget(targetId, thingB's body); look up the cannon ball to see how it get destoried.
-            
+                console.log("Obstacle was hit by the ball");
+                //GET THE target ID, then destroy the target  
+                let targetId = thingB.domObj;
+                console.log(targetId);
             };
-            if ((thingA.isTarget==true) && (thingB.isBall == true)) {
-                console.log("Obstacle was hit by the ball");     
+            if ((thingA.isTarget == true) && (thingB.isBall == true)) {
+                console.log("Obstacle was hit by the ball");
+                //GET THE target ID, then destroy the target  
                 let targetId = thingA.domObj;
                 console.log(targetId);
             };
@@ -78,15 +100,33 @@ export default class World {
             //when we delete the target, we have to update the score too..
         };
 
-        listener.PostSolve = (contact, impulse)=>{
+        listener.PostSolve = (contact, impulse) => {
+            let aBody = contact.GetFixtureA().GetBody();
+            let bBody = contact.GetFixtureB().GetBody();
 
+
+            let thingA = aBody.GetUserData();
+            let thingB = bBody.GetUserData();
+
+            if ((thingA.isBall == true) && (thingB.isTarget == true)) {
+                console.log("Obstacle was hit by the ball");
+                //GET THE target ID, then destroy the target  
+                let targetId = thingB.domObj;
+                this.DestroyTarget(targetId, bBody);
+            };
+            if ((thingA.isTarget == true) && (thingB.isBall == true)) {
+                console.log("Obstacle was hit by the ball");
+                //GET THE target ID, then destroy the target  
+                let targetId = thingA.domObj;
+                this.DestroyTarget(targetId, aBody);
+            };
         };
 
         world.SetContactListener(listener);
     }
 
     _createWorld() {
-        //Gravity vector x, y - 10 m/s2 - thats earth!!
+        // Set gravity to - 10 m/s2
         var gravity = new Physics.Vec2(0, -10);
 
         let newWorld = new Physics.World(gravity, true);
@@ -102,20 +142,36 @@ export default class World {
         newWorld.SetDebugDraw(debugDraw);
 
         //create some objects
-        ground = this._createBox(newWorld, 34.75, 0, 69.5, 1, { type: Physics.Body.b2_staticBody, 'user_data': { 'fill_color': 'rgba(204,237,165,1)', 'border_color': '#7FE57F' } });
-        rightWall = this._createBox(newWorld, 69.5, 15.5, 1, 31, { type: Physics.Body.b2_staticBody, 'user_data': { 'fill_color': 'rgba(204,237,165,1)', 'border_color': '#7FE57F' } });
-
-        //this._createBox(world, 36.50, 3.80, 1, 1, { 'user_data': { 'border_color': '#555' } });
-        //this._createBox(world, 38.50, 3.80, 1, 1, { 'user_data': { 'fill_color': 'rgba(204,0,165,0.3)', 'border_color': '#555' } });
-        //this._createBall(newWorld, 38.50, 3.80, 1, { 'user_data': { 'fill_color': 'rgba(204,100,0,0.3)', 'border_color': '#555' } });
-        //this._createBall(world, 1, 3.80, 1, { 'user_data': { 'fill_color': 'rgba(204,100,0,0.3)', 'border_color': '#555' } });
+        ground = this._createBox(newWorld,
+            34.75,
+            0,
+            69.5,
+            1, {
+                type: Physics.Body.b2_staticBody,
+                'user_data': {
+                    'fill_color': 'rgba(204,237,165,1)',
+                    'border_color': '#7FE57F'
+                }
+            });
+        rightWall = this._createBox(newWorld,
+            69.5,
+            15.5,
+            1,
+            31, {
+                type: Physics.Body.b2_staticBody,
+                'user_data': {
+                    'fill_color': 'rgba(204,237,165,1)',
+                    'border_color': '#7FE57F'
+                }
+            });
 
         return newWorld;
     }
 
     //Create standard boxes of given height , width at x,y
     _createBox(wd, x, y, width, height, options) {
-        //default setting
+
+        // Default settings for the box
         options = $.extend(true, {
             'density': 1.0,
             'friction': 1.0,
@@ -149,7 +205,7 @@ export default class World {
         return b;
     }
 
-    //Function to create a round ball, sphere like object
+    // Function to create a round ball, sphere like object
     _createBall(wd, x, y, radius, options) {
         let body_def = new Physics.BodyDef();
         let fix_def = new Physics.FixtureDef();
@@ -170,7 +226,7 @@ export default class World {
         body_def.userData = options.user_data;
 
         let b = wd.CreateBody(body_def);
-        
+
         b.CreateFixture(fix_def);
 
         return b;
@@ -220,17 +276,44 @@ export default class World {
         ctx.fillStyle = '#fff';
         ctx.fillText('SCORE : ', 85, 30);
         ctx.font = 'bold 20px arial';
-        ctx.fillText('Cannons : ' + this.ammo, 100, 60);
+        ctx.fillText('Ammo : ' + this.ammo, 100, 60);
 
         //call this function again after 1/60 seconds or 16.7ms
         setTimeout(this.update, 1000 / fps);
     }
 
-    DestroyObject(body  /*, isTarget*/ ) {   
+    render(deltaTime) {
+        this.entityList.forEach(entity => {
+            entity.render(deltaTime);
+        });
+    }
+
+    DestroyObject(body) {
         world.DestroyBody(body);
     }
 
-    updateScreen(ammo){
+    DestroyTarget($id, body) {
+        let index = 0;
+
+        this.entityList.forEach(entity => {
+            let entityData = entity.GetModel().GetUserData();
+            if (entityData.domObj == $id) {
+                // delete flag set to true
+                this.deleted = true;
+
+                // Remove the target's html counterpart
+                $id.remove();
+
+                // save the index to be deleted in-game
+                this.deleteIndex = index;
+                return;
+            }
+            index++;
+        });
+
+    }
+
+    updateScreen(ammo) {
         // TODO: Figure adding score
         this.ammo = ammo;
     }

@@ -1,4 +1,5 @@
-// Copyright (C) 2019 Scott Henshaw
+// Copyright (C) 2021 Haojun Liu, Daiyong Kim, Gabriel Zamora 
+// Based on Instructor Scott Henshaw's template
 'use strict';
 
 import EntityController from "./EntityController.js";
@@ -37,6 +38,9 @@ export default class Game {
         this.twoStar = 0;
         this.threeStar = 0;
 
+        // Index to check what object will be deleted
+        this.deleteIndex = 0;
+
         // Cannonball body
         this.cannonball;
         // Cannonball entity number
@@ -60,6 +64,8 @@ export default class Game {
 
                 this.entityList = this.currentLevel.handleLoadLevel(levelData);
 
+                // Save level's entity list to the world's entity list
+                this.__StoreEntitiesOnWorld();
                 // save level Information in game
                 this.StoreLevelInfoInGame(this.currentLevel.GetLevelInfo());
 
@@ -80,6 +86,18 @@ export default class Game {
         this.oneStar = parseInt(levelInfo["oneStar"], 10);
         this.twoStar = parseInt(levelInfo["twoStar"], 10);
         this.threeStar = parseInt(levelInfo["threeStar"], 10);
+    }
+
+    __StoreEntitiesOnWorld() {
+        this.world.SetEntities(this.entityList);
+    }
+
+    checkDelete() {
+        this.deleteIndex = this.world.GetDeletedIndex();
+        if (this.deleteIndex != null) {
+            this.world.DestroyObject(this.entityList[this.deleteIndex].GetModel());
+            this.entityList.splice(this.deleteIndex, 1);
+        }
     }
 
     checkState() {
@@ -118,10 +136,8 @@ export default class Game {
     }
 
     render(deltaTime) {
-        // Render objects and targets within the entity list
-        this.entityList.forEach(entity => {
-            entity.render(deltaTime);
-        });
+        // Render objects and targets within the entity list inside world
+        this.world.render(deltaTime);
     }
 
     run(timestep = 0) {
@@ -131,6 +147,7 @@ export default class Game {
         $("#fireBttn").off().on("click", event => this.tryShoot());
         this.CheckMouse();
         this.checkState();
+        this.checkDelete();
         this.update(deltaTime);
         this.render(deltaTime);
 
@@ -197,8 +214,8 @@ export default class Game {
 
     CheckMouse() {
         // Change from $("#canvas") to $("#window-ed") to change from canvas to game screen detection
-        let $screen = $("#canvas");
-        // let $screen = $("#window-ed");
+        // let $screen = $("#canvas");
+        let $screen = $("#window-ed");
 
         $screen.off()
             .on("click", event => {
@@ -212,24 +229,6 @@ export default class Game {
                 let worldMouseX = (this.mouseCoordX) / SCALE;
                 let worldMouseY = (-this.mouseCoordY + 620) / SCALE;
 
-                // DEBUG: Get Cannon's position
-                let cannonX = $("#Cannon0").position().left / 2;
-                let cannonY = $("#Cannon0").position().top / 2;
-
-                let worldCannonX = (cannonX) / SCALE;
-                let worldCannonY = (-cannonY + 620) / SCALE;
-
-
-                console.log("MOUSECoord x, y:", this.mouseCoordX, this.mouseCoordY);
-                console.log("CANNONCoordx, y", cannonX, cannonY);
-                console.log("worldCannon x, y:", worldCannonX, worldCannonY);
-                console.log("worldMouse x, y:", worldMouseX, worldMouseY);
-                let x = Math.floor(worldCannonX - $("#Cannon0").width() / 2);
-                let y = Math.floor(worldCannonY - $("#Cannon0").height() / 2);
-
-                // Line, debug purposes
-                // this.world.drawline(x, y, worldMouseX, worldMouseY);
-
                 // Rotation of the cannon
                 this.shootAngle = this.entityList[0].rotateCannon(worldMouseX, worldMouseY);
             })
@@ -242,7 +241,7 @@ export default class Game {
     _eraseCannonBall() {
         // Destroy cannonball on the physics world
         this.world.DestroyObject(this.cannonball);
-        
+
         this.world.updateScreen(this.ammo);
 
         // de-reference cannonball

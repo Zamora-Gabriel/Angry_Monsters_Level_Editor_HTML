@@ -1,3 +1,5 @@
+/*Copyright (C) 2021 Haojun Liu, Daiyong Kim, Gabriel Zamora*/
+
 body {
     background-color: midnightblue;
     color: white;
@@ -59,12 +61,10 @@ header {
     position: relative;
 }
 
-
-/*Uncomment to see the image*/
-
 #canvas {
     z-index: 0;
-    /*display: none;*/
+    /*Uncomment display to see the game screen*/
+    display: none;
     position: relative;
 }
 

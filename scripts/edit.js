@@ -1,6 +1,5 @@
 //Copyright (C) 2021 Gabriel Zamora
 
-// Copyright (C) 2021 Gabriel Zamora
 'use strict';
 
 import App from './App.js';
