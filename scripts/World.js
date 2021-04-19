@@ -30,6 +30,7 @@ export default class World {
         this.entityList = []; // List of game objects
         this.deleted = false; // flag to check if deleted
         this.deleteIndex = 0; // index of deleted object
+        this.destroyedTargetValue = 0; // Value of the destroyed target
 
         world = this._createWorld();
 
@@ -51,11 +52,6 @@ export default class World {
         return world;
     }
 
-    // Setters
-    SetEntities(entList) {
-        this.entityList = entList;
-    }
-
     // Delete entity from the game
     GetDeletedIndex() {
         if (this.deleted) {
@@ -66,11 +62,21 @@ export default class World {
         return null;
     }
 
+    GetTargetValue() {
+        return this.destroyedTargetValue;
+    }
+
+    // Setters
+    SetEntities(entList) {
+        this.entityList = entList;
+    }
+
+
+
     _addListener() {
         const listener = new Physics.Listener;
 
         listener.BeginContact = contact => {
-            //console.log("listenerworks");
 
             // Get the bodies involved in collision
             let aBody = contact.GetFixtureA().GetBody();
@@ -86,24 +92,22 @@ export default class World {
 
             if ((thingA.isBall == true) && (thingB.isTarget == true)) {
                 console.log("Obstacle was hit by the ball");
-                //GET THE target ID, then destroy the target  
                 let targetId = thingB.domObj;
                 console.log(targetId);
             };
             if ((thingA.isTarget == true) && (thingB.isBall == true)) {
                 console.log("Obstacle was hit by the ball");
-                //GET THE target ID, then destroy the target  
                 let targetId = thingA.domObj;
                 console.log(targetId);
             };
 
-            //when we delete the target, we have to update the score too..
         };
 
         listener.PostSolve = (contact, impulse) => {
+
+            // Get the bodies involved in the collisions
             let aBody = contact.GetFixtureA().GetBody();
             let bBody = contact.GetFixtureB().GetBody();
-
 
             let thingA = aBody.GetUserData();
             let thingB = bBody.GetUserData();
@@ -112,13 +116,13 @@ export default class World {
                 console.log("Obstacle was hit by the ball");
                 //GET THE target ID, then destroy the target  
                 let targetId = thingB.domObj;
-                this.DestroyTarget(targetId, bBody);
+                this.FindTargetToDestroy(targetId, bBody);
             };
             if ((thingA.isTarget == true) && (thingB.isBall == true)) {
                 console.log("Obstacle was hit by the ball");
                 //GET THE target ID, then destroy the target  
                 let targetId = thingA.domObj;
-                this.DestroyTarget(targetId, aBody);
+                this.FindTargetToDestroy(targetId, aBody);
             };
         };
 
@@ -289,10 +293,11 @@ export default class World {
     }
 
     DestroyObject(body) {
+        // Call destroy body function inside Box2D
         world.DestroyBody(body);
     }
 
-    DestroyTarget($id, body) {
+    FindTargetToDestroy($id, body) {
         let index = 0;
 
         this.entityList.forEach(entity => {
@@ -300,6 +305,9 @@ export default class World {
             if (entityData.domObj == $id) {
                 // delete flag set to true
                 this.deleted = true;
+
+                // Get the value of the target collided
+                this.SetTargetValue($id);
 
                 // Remove the target's html counterpart
                 $id.remove();
@@ -311,6 +319,12 @@ export default class World {
             index++;
         });
 
+    }
+
+    SetTargetValue($id) {
+        // Get the value for the destroyed target
+        this.destroyedTargetValue = $id.attr("data-score");
+        console.log(`Scored: ${this.destroyedTargetValue}`);
     }
 
     updateScreen(ammo) {

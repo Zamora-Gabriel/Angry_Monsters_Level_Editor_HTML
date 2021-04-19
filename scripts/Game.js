@@ -31,6 +31,7 @@ export default class Game {
         this.world = new World();
         this.gameWorld = this.world.GetWorld();
         this.shootAngle = 0;
+        this.score = 0;
 
         // level information
         this.ammo = 0;
@@ -49,12 +50,10 @@ export default class Game {
         // State machine for the game
         this.gameState = GameState.BEGIN;
 
-
         // Mouse coordinates
         this.mouseCoordX = 0;
         this.mouseCoordY = 0;
 
-        // TODO: Find a way for user to change level or user id
         this.userID = 'pg20gabriel';
         this.levelName = userPickedLevel; //'TestLevel';
 
@@ -89,17 +88,27 @@ export default class Game {
     }
 
     __StoreEntitiesOnWorld() {
+        // Share entity list from the level to world
         this.world.SetEntities(this.entityList);
     }
 
     checkDelete() {
+        // Check if there is an object to delete in order to remove it from the list
         this.deleteIndex = this.world.GetDeletedIndex();
         if (this.deleteIndex != null) {
+            // Call destroy object within the world passing the body of the object
             this.world.DestroyObject(this.entityList[this.deleteIndex].GetModel());
+            // Update Score
+            this.__addScore(this.world.GetTargetValue());
             this.entityList.splice(this.deleteIndex, 1);
         }
     }
 
+    __addScore(scoreVal) {
+        this.score += scoreVal;
+    }
+
+    // State machine for the game function
     checkState() {
         if (this.gameState == GameState.BEGIN) {
             console.log("Begin state");

@@ -22,7 +22,8 @@ const YOffset = 620; // Offset for the translation between Y coordinates in scre
 export default class EntityController {
     constructor(world, $el, isKinematic, isRound, options) {
 
-        let x = $el.position().left; // Hardcoded data, TODO: Check elements parameters
+        // Element parameters
+        let x = $el.position().left;
         let y = $el.position().top;
         let width = $el.width();
         let height = $el.height();
@@ -35,6 +36,7 @@ export default class EntityController {
         this.controller = world;
 
         this.$view = $el // = $("#id-of-object")
+
         if (!isRound) {
             this.model = this._createModel(x, y, width, height, isKinematic, options);
             this.userData = { domObj: $el, width: width, height: height, isKinematic: isKinematic, isBall: false, isTarget: this.isTarget };
