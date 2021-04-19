@@ -5,6 +5,7 @@
 import Physics from './libs/Physics.js';
 import ContactListener from './ContactListener.js';
 import EntityController from './EntityController.js';
+import Game from './Game.js';
 
 const TIMESTEP = 1 / 60;
 const VELOCITY = 10;
@@ -39,6 +40,7 @@ export default class World {
         canvas_height_m = canvas_height / scale;
         this._addListener();
         //start update
+        this.ammo = 10;
         this.update();
     }
 
@@ -49,9 +51,7 @@ export default class World {
         const listener =new Physics.Listener;
 
         listener.BeginContact = contact =>{
-            console.log("listenerworks");
-
-
+            //console.log("listenerworks");
             let thingA = contact.GetFixtureA().GetBody().GetUserData();
             let thingB = contact.GetFixtureB().GetBody().GetUserData();
  
@@ -61,26 +61,23 @@ export default class World {
                 return;
             }
 
-
-  //         let idA = thingA.$element.attr('id');
-    //        let idB = thingB.$element.attr('id');
-
-            if ((thingA.isBall == true) || (thingB.isTarget == true)) {
+            if ((thingA.isBall == true) && (thingB.isTarget == true)) {
                 console.log("Obstacle was hit by the ball"); 
                 //GET THE target ID, then destory the target  
                let targetId = thingB.domObj;
+               console.log(targetId);
             //   DestroyTarget(targetId, thingB's body); look up the cannon ball to see how it get destoried.
             
             };
-            if ((thingA.isTarget==true) || (thingB.isBall == true)) {
+            if ((thingA.isTarget==true) && (thingB.isBall == true)) {
                 console.log("Obstacle was hit by the ball");     
-            
+                let targetId = thingA.domObj;
+                console.log(targetId);
             };
-//    if ((thingA.tag == 'box') || (thingB.tag == 'ball')) {
-      //  console.log("Obstacle was hit by the ball");     };
 
-
+            //when we delete the target, we have to update the score too..
         };
+
         listener.PostSolve = (contact, impulse)=>{
 
         };
@@ -218,12 +215,23 @@ export default class World {
         world.DrawDebugData();
         ctx.restore();
 
+        ctx.font = 'bold 20px arial';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#fff';
+        ctx.fillText('SCORE : ', 85, 30);
+        ctx.font = 'bold 20px arial';
+        ctx.fillText('Cannons : ' + this.ammo, 100, 60);
+
         //call this function again after 1/60 seconds or 16.7ms
         setTimeout(this.update, 1000 / fps);
     }
 
-    DestroyObject(body /*, isTarget*/ ) {
-        // TODO: Figure adding score
+    DestroyObject(body  /*, isTarget*/ ) {   
         world.DestroyBody(body);
+    }
+
+    updateScreen(ammo){
+        // TODO: Figure adding score
+        this.ammo = ammo;
     }
 }

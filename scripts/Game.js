@@ -242,6 +242,8 @@ export default class Game {
     _eraseCannonBall() {
         // Destroy cannonball on the physics world
         this.world.DestroyObject(this.cannonball);
+        
+        this.world.updateScreen(this.ammo);
 
         // de-reference cannonball
         this.cannonball = null;
