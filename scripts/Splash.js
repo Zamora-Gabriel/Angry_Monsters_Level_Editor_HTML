@@ -14,7 +14,8 @@ import World from './World.js';
 export default class Splash {
 
     constructor() {
-
+        $('.end-screen').hide();
+        $('.win-screen').hide();
         this._populateLevelList()
         .then(gameLevels => {
             if (gameLevels.error != 0) {
@@ -64,13 +65,7 @@ export default class Splash {
     }
 
     updateCellHandlers(){
-        $(".play-now-btn").on('click', event=>{ 
-            console.log("CLICKED"); 
-            const game = new Game();
-            $('.splash-screen').hide();
-            game.run();
-          
-        }) ;
+
 
         $("#level-loader").on("click", event => {
             console.log("CLICKED butn"); 
@@ -83,11 +78,7 @@ export default class Splash {
           
         }) ;
     }
-
-    run() {
-        game.run();
-    }
-         
+     
     _showErrorDialog(error) {
         // Not found user error
         if (error == 2) { alert("User is not found in the server"); }

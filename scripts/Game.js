@@ -11,7 +11,8 @@ const GameState = {
     BEGIN: 0,
     WAIT: 1,
     SHOOT: 2,
-    GAMEOVER: 3
+    GAMEOVER: 3,
+    WIN:4
 }
 
 const SCALE = 20;
@@ -65,6 +66,11 @@ export default class Game {
 
                 // Save level's entity list to the world's entity list
                 this.__StoreEntitiesOnWorld();
+                
+                this.entityList.forEach(item=>{
+                        if (item.isTarget)
+                            this.targetNumber ++;
+                })
                 // save level Information in game
                 this.StoreLevelInfoInGame(this.currentLevel.GetLevelInfo());
 
@@ -75,11 +81,24 @@ export default class Game {
         $("#back-to-splash").on("click", event => {
             $('.splash-screen').show();
         });
+
+        $("#restart-button").on('click', event=>{ 
+            this.gameState = GameState.BEGIN;
+            let userPickedLevel = this.levelName;
+            //pass in level name
+            console.log(userPickedLevel);
+            const game = new Game(userPickedLevel);
+            $('.end-screen').hide();
+            $('.game-screen').show();
+            game.run();
+           
+          
+        }) ;
     }
 
     StoreLevelInfoInGame(levelInfo) {
         // Save ammo for the level
-        this.ammo = parseInt(levelInfo["ammo"], 10);
+        this.ammo = parseInt(levelInfo["ammo"], 2);
 
 
         // display starting ammo
@@ -139,10 +158,15 @@ export default class Game {
         }
 
         if (this.gameState == GameState.GAMEOVER) {
-            // TODO: game over screen
             // prevent shooting
             gameOverFlag = true;
             this._GameOver();
+        }
+        if (this.gameState == GameState.WIN) {
+            // TODO: game over screen
+            // prevent shooting
+            gameOverFlag = true;
+            this._GameWin();
         }
     }
 
@@ -270,14 +294,38 @@ export default class Game {
 
         // remove the Cannonball div from the game
         $("#CannonBall").remove();
+
+        
+        if (this.ammo==0)
+        {
+            this.gameState = GameState.GAMEOVER;
+
+            console.log("Game over1");
+        }
+
+        if (this.targetNumber == 0)
+        {
+            this.gameState = GameState.WIN;
+        }
+
     }
 
     _GameOver() {
         // Endgame, go to score page
 
-        console.log("Game over");
+        console.log("Game over2");
         // hide game
-        // $('.game-screen').hide();
+         $('.game-screen').hide();
+         $('.end-screen').show();
+
+    }
+    _GameWin() {
+        // Endgame, go to score page
+
+        console.log("Game win");
+        // hide game
+         $('.game-screen').hide();
+         $('.win-screen').show();
 
     }
 }
