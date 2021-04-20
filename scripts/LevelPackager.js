@@ -18,6 +18,9 @@ export default class LevelPackager {
                 targetList: []
             }
         }
+
+        // Total monster points
+        this.totalVal = 0;
     }
 
     buildLevel(submittedInfo) {
@@ -28,7 +31,7 @@ export default class LevelPackager {
         // Fill for entityList
         this.__FillEntity();
 
-
+        this.level.star3 = this.totalVal;
     }
 
     __FillSubmitted(submittedInfo) {
@@ -78,6 +81,7 @@ export default class LevelPackager {
 
         if (classArr[2] == "target") {
             entity["valueTarget"] = $item.attr("data-score");
+            this.totalVal += parseInt($item.attr("data-score"));
         }
 
         // Get css properties
