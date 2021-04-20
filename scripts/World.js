@@ -99,8 +99,6 @@ export default class World {
                 console.log("Obstacle was hit by the ball");
                 let targetId = thingA.domObj;
                 console.log(targetId);
-                world.DestroyObject(thingA);
-             //   _destoryTarget(thingA);
             };
 
         };
@@ -129,11 +127,6 @@ export default class World {
         };
 
         world.SetContactListener(listener);
-    }
-
-    _destoryTarget(target)
-    {
-        
     }
 
     _createWorld() {

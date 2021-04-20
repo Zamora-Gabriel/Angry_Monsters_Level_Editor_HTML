@@ -8,7 +8,7 @@ For this iteration, the game was required to be built with Javascript, html5, cs
 The goal of this assignment is to apply the knowledge about Javascript and jquery as well as using different tools as the physics engine,
 in order to achieve the goal of making a playable game.
 
-[demo] (https://github.com/Zamora-Gabriel/PG20_Gabriel_JavascriptWebApps_A1) | [tutorial] (link)
+[demo] (https://github.com/Zamora-Gabriel/PG20_Gabriel_JavascriptWebApps_A1/tree/Game) | [tutorial] (link)
 
 
 ## Synopsis
@@ -21,9 +21,8 @@ Draggables were used as well in order to edit the level in order to populate it 
 # Download/Install
 ---------------------------------------
 
-Browse to demo link
-
-[Download Zip](https://github.com/Zamora-Gabriel/PG20_Gabriel_JavascriptWebApps_A1/archive/refs/heads/main.zip)
+Download Zip or clone from the Game branch
+[Zip] (https://github.com/Zamora-Gabriel/PG20_Gabriel_JavascriptWebApps_A1/archive/refs/heads/Game.zip)
 
 - Once downloaded Uncompress the zip to a folder
 
@@ -63,9 +62,7 @@ For the game area:
 
 - The objective is defeating the target monsters to score and trying to get the highest score possible.
 
-- Once all the targets are defeated, the player can shoot the remaining cannonballs as part of his or her victory.
-
-- The player can return to level selection (splash page) by clicking the top button called "Level-Pick".
+- Once all the targets are defeated a message will display as part of his or her victory showing as well the player's score.
 
 - After the game ends, a game over display will pop up showing the player's score.
 
@@ -75,5 +72,3 @@ For the game area:
 ---------------------------------------
 
 - Missing animations
-
-- Missing Game over screen

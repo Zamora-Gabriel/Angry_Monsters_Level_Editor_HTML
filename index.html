@@ -16,28 +16,19 @@
         <select id="level-list" name="Levels">
             <!--Add by getting the levels from server-->
         </select>
-
+        <div class="play-now-btn">PLAY</div>
         <button id="level-loader">Load-Level</button>
     </div>
 
-    <div class="end-screen">    
-        <div>GameOver</div>
-            <!--Add by getting the levels from server-->
-        </select>
-        <button id="restart-button">Restart</button>
-    </div>
-    
-    <div class="end-screen">    
-        <div>You win!</div>
-            <!--Add by getting the levels from server-->
-        </select>
-        <button id="next-button">Next</button>
+    <div class="end-screen">
+        <div id="results-screen" class="score-text">GameOver</div>
+        <div id="score-results" class="score-text"></div>
     </div>
 
 
     <header>
-        <!--On work... To go to editor add /editor to the current url-->
-        <h1>Game Window V 0.1</h1>
+        <!--Angry Monsters V1.0-->
+        <h1>Game Window V 1.0</h1>
         <button id="back-to-splash">Level-Pick</button>
     </header>
     <main>
@@ -52,7 +43,7 @@
             </section>
             <button id="fireBttn">Shoot!</button>
         </section>
-        <div class="score-text">Score: 0</div>
+        <div id="score-game" class="score-text">Score: 0</div>
         <div class="ammo-text">Remaining Ammo: 0</div>
     </main>
 

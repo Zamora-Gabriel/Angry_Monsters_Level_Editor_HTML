@@ -1,33 +1,34 @@
-//Copyright (C) 2021 Gabriel Zamora
+//Copyright (C) 2021 Haojun Liu, Daiyong Kim, Gabriel Zamora
 
-// Copyright (C) 2021 Gabriel Zamora
 'use strict';
 import Request from './Request.js';
-import App from './App.js';
-import Editor from './Editor.js';
 import Game from './Game.js';
-import ObjWindow from './ObjWindow.js';
-import World from './World.js';
 
 //main
 
 export default class Splash {
 
     constructor() {
-        $('.end-screen').hide();
-        $('.win-screen').hide();
-        this._populateLevelList()
-        .then(gameLevels => {
-            if (gameLevels.error != 0) {
-                this._showErrorDialog(gameLevels.error);
-                return;
-            }
-            // Shove all level names to Select level field
-            this._updateLevelList(gameLevels.payload);
-        })
-        .catch(error => { this._showErrorDialog(error) });
 
-        this.updateCellHandlers();        
+        this.game;
+        this._populateLevelList()
+            .then(gameLevels => {
+                if (gameLevels.error != 0) {
+                    this._showErrorDialog(gameLevels.error);
+                    return;
+                }
+                // Shove all level names to Select level field
+                this._updateLevelList(gameLevels.payload);
+            })
+            .catch(error => { this._showErrorDialog(error) });
+
+        this.__initSplash();
+        this.updateCellHandlers();
+    }
+
+    __initSplash() {
+        // hide end screen
+        $('.end-screen').hide();
     }
 
     _populateLevelList() {
@@ -64,21 +65,33 @@ export default class Splash {
         });
     }
 
-    updateCellHandlers(){
+    updateCellHandlers() {
+        $(".play-now-btn").on('click', event => {
+            console.log("CLICKED");
+            this.game = new Game();
+            $('.splash-screen').hide();
+            $('.game-screen').show();
+            this.game.run();
 
+        });
 
         $("#level-loader").on("click", event => {
-            console.log("CLICKED butn"); 
+            console.log("CLICKED button");
 
             let userPickedLevel = $("#level-list :selected").val();
             //pass in level name
-            const game = new Game(userPickedLevel);
+            this.game = new Game(userPickedLevel);
             $('.splash-screen').hide();
-            game.run();
-          
-        }) ;
+            $('.game-screen').show();
+            this.game.run();
+
+        });
     }
-     
+
+    run() {
+        this.game.run();
+    }
+
     _showErrorDialog(error) {
         // Not found user error
         if (error == 2) { alert("User is not found in the server"); }
@@ -86,6 +99,6 @@ export default class Splash {
         // Load error
         alert("Data couldn't be loaded");
     }
-  
+
 
 }

@@ -12,7 +12,7 @@ const GameState = {
     WAIT: 1,
     SHOOT: 2,
     GAMEOVER: 3,
-    WIN:4
+    WIN: 4
 }
 
 const SCALE = 20;
@@ -35,10 +35,10 @@ export default class Game {
         this.score = 0;
 
         // level information
-        this.ammo = 0;
+        this.ammo = 1;
         this.oneStar = 0;
         this.twoStar = 0;
-        this.threeStar = 0;
+        this.threeStar = 1;
 
         // Index to check what object will be deleted
         this.deleteIndex = 0;
@@ -66,11 +66,6 @@ export default class Game {
 
                 // Save level's entity list to the world's entity list
                 this.__StoreEntitiesOnWorld();
-                
-                this.entityList.forEach(item=>{
-                        if (item.isTarget)
-                            this.targetNumber ++;
-                })
                 // save level Information in game
                 this.StoreLevelInfoInGame(this.currentLevel.GetLevelInfo());
 
@@ -79,26 +74,18 @@ export default class Game {
 
         // add all UI handlers here
         $("#back-to-splash").on("click", event => {
-            $('.splash-screen').show();
+            this._restart();
         });
+    }
 
-        $("#restart-button").on('click', event=>{ 
-            this.gameState = GameState.BEGIN;
-            let userPickedLevel = this.levelName;
-            //pass in level name
-            console.log(userPickedLevel);
-            const game = new Game(userPickedLevel);
-            $('.end-screen').hide();
-            $('.game-screen').show();
-            game.run();
-           
-          
-        }) ;
+    _restart() {
+        $('.splash-screen').show();
+        $('.end-screen').hide();
     }
 
     StoreLevelInfoInGame(levelInfo) {
         // Save ammo for the level
-        this.ammo = parseInt(levelInfo["ammo"], 2);
+        this.ammo = parseInt(levelInfo["ammo"], 10);
 
 
         // display starting ammo
@@ -130,43 +117,47 @@ export default class Game {
     __addScore(scoreVal) {
         this.score += parseInt(scoreVal);
         // Update score field
-        $(".score-text").text(`Score: ${this.score}`);
+        $("#score-game").text(`Score: ${this.score}`);
     }
 
     // State machine for the game function
     checkState() {
-        if (this.gameState == GameState.BEGIN) {
-            console.log("Begin state");
-            this.gameState = GameState.WAIT;
-        }
 
-        if (this.gameState == GameState.WAIT) {
-
-            if (this.ammo < 0) {
-                // Game Over condition
-                this.gameState = GameState.GAMEOVER;
-            }
-        }
-
-        if (this.gameState == GameState.SHOOT) {
-            //Shooting state
-            if (!this.cannonball.IsAwake()) {
-                console.log("cannonball is asleep");
-                this._eraseCannonBall();
+        switch (this.gameState) {
+            case GameState.BEGIN:
+                console.log("Begin state");
                 this.gameState = GameState.WAIT;
-            }
-        }
+                break;
+            case GameState.WAIT:
+                if (this.ammo <= 0) {
+                    // Game Over condition
+                    this.gameState = GameState.GAMEOVER;
+                }
 
-        if (this.gameState == GameState.GAMEOVER) {
-            // prevent shooting
-            gameOverFlag = true;
-            this._GameOver();
-        }
-        if (this.gameState == GameState.WIN) {
-            // TODO: game over screen
-            // prevent shooting
-            gameOverFlag = true;
-            this._GameWin();
+                if (this.score >= this.threeStar) {
+                    this.gameState = GameState.WIN;
+                }
+                break;
+            case GameState.SHOOT:
+                //Shooting state
+                if (!this.cannonball.IsAwake()) {
+                    console.log("cannonball is asleep");
+                    this._eraseCannonBall();
+                    this.gameState = GameState.WAIT;
+                }
+                break;
+            case GameState.GAMEOVER:
+                // prevent shooting
+                gameOverFlag = true;
+                this._GameOver();
+                break;
+            case GameState.WIN:
+                // prevent shooting
+                gameOverFlag = true;
+                this._GameWin();
+                break;
+            default:
+                break;
         }
     }
 
@@ -294,20 +285,6 @@ export default class Game {
 
         // remove the Cannonball div from the game
         $("#CannonBall").remove();
-
-        
-        if (this.ammo==0)
-        {
-            this.gameState = GameState.GAMEOVER;
-
-            console.log("Game over1");
-        }
-
-        if (this.targetNumber == 0)
-        {
-            this.gameState = GameState.WIN;
-        }
-
     }
 
     _GameOver() {
@@ -315,8 +292,10 @@ export default class Game {
 
         console.log("Game over2");
         // hide game
-         $('.game-screen').hide();
-         $('.end-screen').show();
+        $('.game-screen').hide();
+        $('.end-screen').show();
+        $('#results-screen').text("Game Over");
+        $('#score-results').text(`Final Score: ${this.score}`);
 
     }
     _GameWin() {
@@ -324,8 +303,10 @@ export default class Game {
 
         console.log("Game win");
         // hide game
-         $('.game-screen').hide();
-         $('.win-screen').show();
+        $('.game-screen').hide();
+        $('.end-screen').show();
+        $('#results-screen').text("Congratulations You Won!");
+        $('#score-results').text(`Final Score: ${this.score}`);
 
     }
 }
